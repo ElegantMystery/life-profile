@@ -1,0 +1,79 @@
+{
+  "schema_version": "0.1.0",
+  "entries": [
+    {
+      "id": "pref-old",
+      "domain": "preferences",
+      "statement": "For craft planning, I prefer long explanations.",
+      "source": {
+        "kind": "user_statement",
+        "reference": "Fictional direct restatement"
+      },
+      "confirmation": "confirmed",
+      "sensitivity": "general",
+      "subject": "self",
+      "status": "superseded",
+      "created": "2026-09-01",
+      "updated": "2026-10-01",
+      "review_due": "2027-01-01",
+      "expires": null,
+      "supersedes": []
+    },
+    {
+      "id": "pref-current",
+      "domain": "preferences",
+      "statement": "For craft planning, I prefer short numbered steps.",
+      "source": {
+        "kind": "user_statement",
+        "reference": "Fictional direct restatement"
+      },
+      "confirmation": "confirmed",
+      "sensitivity": "general",
+      "subject": "self",
+      "status": "active",
+      "created": "2026-10-01",
+      "updated": "2026-10-01",
+      "review_due": "2027-01-01",
+      "expires": null,
+      "supersedes": [
+        "pref-old"
+      ]
+    },
+    {
+      "id": "private-note",
+      "domain": "preferences",
+      "statement": "Fictional private scheduling constraint.",
+      "source": {
+        "kind": "user_statement",
+        "reference": "Fictional direct restatement"
+      },
+      "confirmation": "confirmed",
+      "sensitivity": "private",
+      "subject": "self",
+      "status": "active",
+      "created": "2026-10-01",
+      "updated": "2026-10-01",
+      "review_due": "2027-01-01",
+      "expires": null,
+      "supersedes": []
+    },
+    {
+      "id": "inferred-note",
+      "domain": "preferences",
+      "statement": "Perhaps group classes would be enjoyable.",
+      "source": {
+        "kind": "ai_inference",
+        "reference": "Fictional AI suggestion"
+      },
+      "confirmation": "pending",
+      "sensitivity": "general",
+      "subject": "self",
+      "status": "active",
+      "created": "2026-10-01",
+      "updated": "2026-10-01",
+      "review_due": "2027-01-01",
+      "expires": null,
+      "supersedes": []
+    }
+  ]
+}

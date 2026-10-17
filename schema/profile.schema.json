@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Life Profile register 0.1.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "entries"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "0.1.0"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "domain",
+          "statement",
+          "source",
+          "confirmation",
+          "sensitivity",
+          "subject",
+          "status",
+          "created",
+          "updated",
+          "review_due",
+          "expires",
+          "supersedes"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{0,63}$"
+          },
+          "domain": {
+            "type": "string",
+            "enum": [
+              "stable-profile",
+              "current-context",
+              "values",
+              "goals-projects",
+              "learning-skills",
+              "relationships",
+              "preferences",
+              "decisions-experiences",
+              "work-contribution",
+              "home-daily-life",
+              "health-optional",
+              "finance-optional",
+              "life-admin-optional"
+            ]
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "\\S"
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "kind",
+              "reference"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "user_statement",
+                  "ai_inference",
+                  "third_party_report",
+                  "unknown"
+                ]
+              },
+              "reference": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "\\S"
+              }
+            }
+          },
+          "confirmation": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "confirmed",
+              "disputed"
+            ]
+          },
+          "sensitivity": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "public",
+              "general",
+              "private",
+              "sensitive"
+            ]
+          },
+          "subject": {
+            "type": "string",
+            "enum": [
+              "self",
+              "third_party",
+              "unknown"
+            ]
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "active",
+              "superseded",
+              "archived"
+            ]
+          },
+          "created": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "updated": {
+            "type": "string",
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "review_due": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "expires": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+          },
+          "supersedes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]{0,63}$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

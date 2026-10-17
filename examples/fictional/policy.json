@@ -1,0 +1,10 @@
+{
+  "schema_version": "0.1.0",
+  "purpose": "Plan a fictional craft practice session",
+  "allow_ids": [
+    "pref-current",
+    "private-note",
+    "inferred-note",
+    "pref-old"
+  ]
+}

@@ -1,0 +1,9 @@
+# Convenience only; does not protect already tracked files.
+private/
+exports/
+backups/
+*.local.json
+.env
+.env.*
+node_modules/
+*.zip
