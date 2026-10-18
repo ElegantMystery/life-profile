@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { initProfile } from '../tools/setup-storage.mjs';
+import { initProfile, privateDirectory } from '../tools/setup-storage.mjs';
 import { inspectDraft, confirmDraft } from '../tools/setup-records.mjs';
 import { exportProfile } from '../tools/profile.mjs';
 
@@ -31,10 +31,15 @@ test('initialization refuses any existing destination without modifying it',t=>{
  const base=sandbox(t);for(const name of ['empty','occupied']){const dest=join(base,name);mkdirSync(dest);if(name==='occupied')writeFileSync(join(dest,'keep.txt'),'keep');assert.throws(()=>initProfile(dest));assert.deepEqual(readdirSync(dest),name==='occupied'?['keep.txt']:[]);}
  const file=join(base,'file');writeFileSync(file,'keep');assert.throws(()=>initProfile(file));assert.equal(readFileSync(file,'utf8'),'keep');
 });
-test('initializer rejects relative, network, project and Git-managed destinations',t=>{
+test('initializer rejects relative, UNC spelling, project and Git-managed destinations',t=>{
  const base=sandbox(t);mkdirSync(join(base,'repo'));writeFileSync(join(base,'repo','.git'),'gitdir: elsewhere');
  for(const dest of ['relative-profile','//server/share/profile',join(project,'new-private-profile'),join(base,'repo','profile'),join(base,'missing','profile')])assert.throws(()=>initProfile(dest));
  assert.equal(existsSync(join(project,'new-private-profile')),false);
+});
+test('path errors describe syntax restrictions without asserting storage locality',()=>{
+ for(const path of ['relative-profile','//server/share/profile','\\\\server\\share\\profile','\\/server/share/profile','/\\server/share/profile']){
+  for(const check of [initProfile,privateDirectory])assert.throws(()=>check(path),{message:'ABSOLUTE_NON_UNC_PATH_REQUIRED'});
+ }
 });
 test('initializer rejects directory junction/symlink ancestors',t=>{
  const base=sandbox(t),target=join(base,'real'),alias=join(base,'alias');mkdirSync(target);symlinkSync(target,alias,process.platform==='win32'?'junction':'dir');

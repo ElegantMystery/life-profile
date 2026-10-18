@@ -11,9 +11,10 @@ export function stop(code){throw new Error(code);}
 function statIfPresent(path){try{return lstatSync(path);}catch(error){if(error.code==='ENOENT')return null;throw error;}}
 function outsideProject(path){const rel=relative(PROJECT,path);return rel==='..'||rel.startsWith('..'+sep)||isAbsolute(rel);}
 
-// Conservative local paths only. This is protection against mistakes, not an OS sandbox.
+// Reject UNC/double-separator spelling, not mapped drives or mounted filesystems.
+// Storage locality is not detected. This is not an OS sandbox.
 export function privateDirectory(path){
- if(typeof path!=='string'||!isAbsolute(path)||/^[\\/]{2}/.test(path))stop('ABSOLUTE_LOCAL_PATH_REQUIRED');
+ if(typeof path!=='string'||!isAbsolute(path)||/^[\\/]{2}/.test(path))stop('ABSOLUTE_NON_UNC_PATH_REQUIRED');
  const full=resolve(path);
  if(!outsideProject(full))stop('DESTINATION_INSIDE_PROJECT');
  const root=parse(full).root;let current=root;
@@ -42,7 +43,7 @@ export function privateInstance(dest){
 }
 
 export function initProfile(dest){
- if(typeof dest!=='string'||!isAbsolute(dest)||/^[\\/]{2}/.test(dest))stop('ABSOLUTE_LOCAL_PATH_REQUIRED');
+ if(typeof dest!=='string'||!isAbsolute(dest)||/^[\\/]{2}/.test(dest))stop('ABSOLUTE_NON_UNC_PATH_REQUIRED');
  const root=resolve(dest);
  if(!outsideProject(root))stop('DESTINATION_INSIDE_PROJECT');
  privateDirectory(dirname(root));

@@ -2,6 +2,8 @@
 
 This is your private instance, separate from the public template. No personal claims have been supplied. Local plaintext files are not encrypted. A cloud-backed assistant may send any content you provide or let it read to its provider. Check that assistant's data handling before continuing. This project makes no model calls itself.
 
+Verify this folder's backing storage before entering personal information. The initializer rejects UNC/double-separator path spellings but does not detect mapped Windows drives, mounted network filesystems or cloud-sync folders. A path accepted by the initializer is not proof that storage is local or private.
+
 ## First session
 
 1. Open this private folder in your existing coding assistant, or explicitly grant access to the specific files you want it to use. Do not open your whole home directory or public template repository as a substitute.
