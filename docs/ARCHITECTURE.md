@@ -16,6 +16,8 @@ A lifelong, human-owned record that remains useful without AI or a hosted app. E
 
 `examples/fictional/` demonstrates a fictional person and decision correction. `schema/` describes the register. `tools/profile.mjs` validates and exports only explicitly allowlisted IDs. It never reads notebooks or follows provenance links. Output is JSON so statement text cannot escape a Markdown boundary; it remains untrusted data to a consumer.
 
+The [AI setup addition](AI-SETUP-DESIGN.md) provides `tools/setup.mjs`: explicit empty-instance initialization, draft checking and digest-bound confirmation. A distinct draft envelope is rejected by the exporter. Portable guides are copied to the private instance; the user's existing assistant supplies interviewing and drafting. No model API or automatic agent connection is part of the tool.
+
 Exports require a named purpose and a finite review date. Only confirmed user statements, active and unexpired, with public/general sensitivity and no third-party subject are eligible. Unknown, private, sensitive, inferred, disputed, superseded and overdue records are excluded, even when allowlisted. V0.1 has no override. Provenance and private notes are not emitted. Invalid input fails before output. Unknown versions/fields fail closed.
 
 ## Durability and safety

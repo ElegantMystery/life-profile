@@ -21,3 +21,9 @@ Behavior suite covers default exclusions, exact allowlists, omission of provenan
 The repository check verifies local Markdown file targets, JSON parsing and a heuristic scan for common key formats, email addresses and Windows personal paths. It does not validate remote availability, Markdown anchors, all secret formats, indirect identification or semantic truth. Manual review complements it. Public reference files and four license files were rechecked at pinned commits; one standalone LICENSE returned 404. See the inspiration document for exact references.
 
 No real profile, private notes or messages are included. Fictional examples were authored for this project. The owner selected MIT licensing; the copyright attribution uses the verified public owner identity. No private contact details or credentials belong in the release.
+
+## AI-guided setup milestone — 2026-10-18
+
+Full suite: 86 passed, 0 failed, 0 skipped (62 existing tests plus 24 new setup tests). The new tests use disposable fictional instances only and exercise initialization refusal/preservation, unsafe destinations and links, empty starter contents, draft/export separation, selected digest-bound confirmation, source-kind preservation, exact deduplication, supersession, changed inputs, locks, temporary files and CLI errors.
+
+The repository checker passed 53 files and 54 local Markdown links, with all JSON parsing and no heuristic secret/identifier matches. A separate read-only reviewer found no blocking defect and independently ran 23 setup tests in-process. The complete CLI subprocess tests also passed in the implementation session. See docs/AI-SETUP-DESIGN.md for the plan and review ledger; the assistant's behavioral guidance is not a security enforcement mechanism.

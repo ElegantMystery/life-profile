@@ -5,17 +5,20 @@ A personal record you can maintain for decades in ordinary text files. Use it wi
 
 ## Start in fifteen minutes
 
-1. Read [privacy boundaries](docs/PRIVACY.md) and [onboarding](docs/ONBOARDING.md).
-2. Copy only `templates/` to a protected folder **outside this project**. Keep that private instance separate from the shareable template. Choose your own storage and backup controls; none are configured here.
-3. Start with one useful preference and one current priority in the Markdown notebooks. Skip anything you do not want to record.
-4. If exports are useful, add individually reviewed statements to `records.json` using the [schema guide](schema/README.md). Otherwise leave its entries empty.
-5. Review using the [maintenance workflow](docs/MAINTENANCE.md). Consult the [fictional walkthrough](examples/fictional/README.md) for a completed example.
+1. Read [privacy boundaries](docs/PRIVACY.md) and [AI-guided setup](docs/AI-SETUP.md). Use your existing coding assistant; no new model API or account is needed. Local files may still be processed by a cloud-backed assistant when you give it access.
+2. From this project folder, run `node tools/setup.mjs init --dest "<absolute-new-private-folder>"`. Choose a protected new folder **outside this project and other Git working trees**, with an existing parent. The command refuses existing destinations and copies only empty templates and guides. No encryption or Windows access controls are configured.
+3. Open the new private instance's START-HERE.md. Explicitly connect your assistant with its session-start prompt so it loads ASSISTANT-GUIDE.md. No global agent configuration is edited automatically.
+4. Answer a few basic questions, or authorize specific context for a small draft. The assistant writes proposals; you correct and select what to keep. [Draft confirmation](docs/AI-SETUP.md) is separate from notes and never grants export permissions. Skip or resume modules whenever useful; all 13 are optional.
+5. Return to your actual work. The copied guide supports occasional relevant update proposals. Review using the [maintenance workflow](docs/MAINTENANCE.md); consult the [fictional walkthrough](examples/fictional/README.md) only as a demonstration.
+
+Prefer working without AI or Node? Copy only `templates/` to a protected private folder and edit the Markdown yourself. This manual route has no instance marker; the setup confirmation CLI requires an initialized instance and will not adopt or overwrite a manual folder. The existing validator/exporter still accepts explicit JSON paths.
 
 A new instance contains structure, prompts and empty fields only: zero profile records and an empty export allowlist. No example data is copied, discovered or imported automatically. Keep `examples/fictional/` out of your private instance; its invented statements are never facts about you.
 
 ## Contents
 
 - [Domain index](templates/INDEX.md): stable profile, context, goals, learning, relationships, values, preferences, decisions and optional life domains.
+- [AI setup and ongoing assistant guide](docs/AI-SETUP.md), [connection prompt](templates/START-HERE.md).
 - [Architecture and tradeoffs](docs/ARCHITECTURE.md), [implementation plan](docs/PLAN.md).
 - [Export guide](docs/EXPORTS.md), [migration guide](docs/MIGRATIONS.md).
 - [References and license observations](docs/INSPIRATION.md).
