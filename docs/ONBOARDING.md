@@ -1,5 +1,7 @@
 # Gentle onboarding
 
+For developers using an existing coding assistant, start with [AI-guided setup](AI-SETUP.md). The copied guide helps the assistant draft from a few basic answers or explicitly authorized context, then proposes small updates over time. This page remains an optional manual prompt list, not a required form.
+
 You control what is recorded. Skip any question, stop at any time, or keep the answer on paper. Do not import chats, email, contacts, existing notes or account data by default. No AI is needed.
 
 1. What would make this record useful to you in the next month?
