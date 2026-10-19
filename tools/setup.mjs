@@ -6,7 +6,7 @@ import { inspectDraft, confirmDraft } from './setup-records.mjs';
 export function run(args){
  const [command,...rest]=args;
  const expected={init:['--dest'],'check-draft':['--dest','--draft'],confirm:['--dest','--draft','--ids','--approve']}[command];
- if(!expected||rest.length!==expected.length*2)stop('INVALID_ARGUMENTS');
+ if(!expected||rest.length%2!==0||rest.length>expected.length*2||(command!=='init'&&rest.length!==expected.length*2))stop('INVALID_ARGUMENTS');
  const options={};
  for(let i=0;i<rest.length;i+=2){
   if(!expected.includes(rest[i])||Object.hasOwn(options,rest[i])||!rest[i+1])stop('INVALID_ARGUMENTS');

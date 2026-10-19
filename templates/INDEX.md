@@ -1,8 +1,8 @@
 # Domain index
 
-All modules are optional. Empty means not recorded, not absent from your life. Keep completed copies in a separate private instance. Use the metadata block in each notebook for claims you want to maintain.
+All modules are optional. Empty means not recorded, not absent from your life. Keep completed copies in the private instance: the checkout's ignored root `private/` folder by default, or an explicitly chosen external folder. Never fill in tracked source templates. Use the metadata block in each notebook for claims you want to maintain.
 
-- [Stable profile](domains/stable-profile.md)
+- [Basic profile](domains/basic.md)
 - [Current context](domains/current-context.md)
 - [Values and meaning](domains/values.md)
 - [Goals and projects](domains/goals-projects.md)

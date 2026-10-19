@@ -1,5 +1,5 @@
 # Convenience only; does not protect already tracked files.
-private/
+/private/
 exports/
 backups/
 *.local.json

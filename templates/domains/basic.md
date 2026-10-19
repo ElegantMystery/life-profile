@@ -1,4 +1,4 @@
-# Stable profile
+# Basic profile
 
 Optional prompt: Which roles, self-descriptions or capabilities remain useful across years?
 

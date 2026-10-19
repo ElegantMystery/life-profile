@@ -114,11 +114,11 @@ test('linked register and draft files are refused',t=>{
  rmSync(join(dest,'records.json'));writeFileSync(join(dest,'records.json'),JSON.stringify({schema_version:'0.1.0',entries:[]}));
  const second=join(sandbox(t),'draft.json');writeFileSync(second,readFileSync(join(dest,'drafts',name)));rmSync(join(dest,'drafts',name));linkSync(second,join(dest,'drafts',name));assert.throws(()=>inspectDraft(dest,name));
 });
-test('CLI has explicit paths, no implicit questionnaire, and no implicit approval',t=>{
+test('CLI keeps explicit override paths, no implicit questionnaire, and no implicit approval',t=>{
  const dest=join(sandbox(t),'cli-profile');const run=args=>spawnSync(process.execPath,['tools/setup.mjs',...args],{cwd:project,encoding:'utf8'});
  const initialized=run(['init','--dest',dest]);assert.equal(initialized.status,0,initialized.stderr);draft(dest);
  const checked=run(['check-draft','--dest',dest,'--draft','basic.json']);assert.equal(checked.status,0,checked.stderr);const digest=JSON.parse(checked.stdout).approval_digest;
  const missing=run(['confirm','--dest',dest,'--draft','basic.json','--ids','fictional-pref']);assert.notEqual(missing.status,0);assert.equal(missing.stdout,'');
  const confirmed=run(['confirm','--dest',dest,'--draft','basic.json','--ids','fictional-pref','--approve',digest]);assert.equal(confirmed.status,0,confirmed.stderr);assert.equal(json(join(dest,'records.json')).entries.length,1);
- for(const args of [[],['init'],['init','--dest',dest,'--force'],['check-draft','--dest',dest,'--dest',dest,'--draft','basic.json']])assert.notEqual(run(args).status,0);
+ for(const args of [[],['init','--dest'],['init','--dest',dest,'--force'],['check-draft','--dest',dest,'--dest',dest,'--draft','basic.json']])assert.notEqual(run(args).status,0);
 });

@@ -15,4 +15,4 @@ You control what is recorded. Skip any question, stop at any time, or keep the a
 
 Use your own words. A suggested AI summary starts as an inference and pending confirmation, never a fact. If you independently restate it, create a new user-statement entry and preserve the earlier provenance privately. Do not silently relabel the inference.
 
-Start with the stable profile, current context and goals. Add other modules only when useful. Health, finance, legal/life administration, caregiving and legacy planning are optional; no diagnoses, balances, identifying documents or trauma narratives are requested. Record pointers to independently protected documents if needed, not their contents or secrets.
+Start with the basic profile (`domains/basic.md`), current context and goals. Add other modules only when useful. Health, finance, legal/life administration, caregiving and legacy planning are optional; no diagnoses, balances, identifying documents or trauma narratives are requested. Record pointers to independently protected documents if needed, not their contents or secrets.

@@ -6,18 +6,20 @@ A personal record you can maintain for decades in ordinary text files. Use it wi
 ## Start in fifteen minutes
 
 1. Read [privacy boundaries](docs/PRIVACY.md) and [AI-guided setup](docs/AI-SETUP.md). Use your existing coding assistant; no new model API or account is needed. Local files may still be processed by a cloud-backed assistant when you give it access.
-2. From this project folder, run `node tools/setup.mjs init --dest "<absolute-new-private-folder>"`. Choose a protected new folder **outside this project and other Git working trees**, with an existing parent. The command refuses existing destinations and copies only empty templates and guides. Verify its backing storage yourself: UNC path spellings are refused, but mapped drives, network mounts and cloud sync are not detected. No encryption or Windows access controls are configured.
+2. From this project folder, run `node tools/setup.mjs init`. It creates **`private/` at the root of this tools checkout**, covered by the root-anchored `/private/` rule in `.gitignore`. The destination must not already exist. To choose another location, use `node tools/setup.mjs init --dest "<absolute-new-private-folder>"`; other destinations must be outside this project and other Git working trees, with an existing parent. Only empty templates and guides are copied. Verify backing storage yourself: mapped drives, network mounts and cloud sync are not detected. No encryption or Windows access controls are configured.
 3. Open the new private instance's START-HERE.md. Explicitly connect your assistant with its session-start prompt so it loads ASSISTANT-GUIDE.md. No global agent configuration is edited automatically.
 4. Answer a few basic questions, or authorize specific context for a small draft. The assistant writes proposals; you correct and select what to keep. [Draft confirmation](docs/AI-SETUP.md) is separate from notes and never grants export permissions. Skip or resume modules whenever useful; all 13 are optional.
 5. Return to your actual work. The copied guide supports occasional relevant update proposals. Review using the [maintenance workflow](docs/MAINTENANCE.md); consult the [fictional walkthrough](examples/fictional/README.md) only as a demonstration.
 
 Prefer working without AI or Node? Copy only `templates/` to a protected private folder and edit the Markdown yourself. This manual route has no instance marker; the setup confirmation CLI requires an initialized instance and will not adopt or overwrite a manual folder. The existing validator/exporter still accepts explicit JSON paths.
 
+Keep personal content inside `private/`, never in `templates/` or other tracked project files. `.gitignore` does not protect already tracked files, prevent `git add -f`, encrypt data or exclude it from editor/AI access, sync and whole-folder archives. Before entering personal data, verify `git check-ignore -v private/records.json` reports `/private/` and `git ls-files -- private` prints nothing. Avoid cleanup commands that delete ignored files, such as `git clean -fdx`. See [privacy boundaries](docs/PRIVACY.md).
+
 A new instance contains structure, prompts and empty fields only: zero profile records and an empty export allowlist. No example data is copied, discovered or imported automatically. Keep `examples/fictional/` out of your private instance; its invented statements are never facts about you.
 
 ## Contents
 
-- [Domain index](templates/INDEX.md): stable profile, context, goals, learning, relationships, values, preferences, decisions and optional life domains.
+- [Domain index](templates/INDEX.md): basic profile, context, goals, learning, relationships, values, preferences, decisions and optional life domains.
 - [AI setup and ongoing assistant guide](docs/AI-SETUP.md), [connection prompt](templates/START-HERE.md).
 - [Architecture and tradeoffs](docs/ARCHITECTURE.md), [implementation plan](docs/PLAN.md).
 - [Export guide](docs/EXPORTS.md), [migration guide](docs/MIGRATIONS.md).
@@ -33,7 +35,7 @@ Node.js 20 or newer; no npm installation, dependencies, server or network access
 Open a terminal in the extracted `life-profile` project folder before running these commands. These checks use the empty template and test fixtures; they do not populate a profile.
 
 ```sh
-node --test tests
+node --test tests/profile.test.mjs tests/setup.test.mjs tests/private-default.test.mjs
 node tools/profile.mjs validate templates/records.json
 ```
 
@@ -46,11 +48,11 @@ node tools/profile.mjs export examples/fictional/records.json examples/fictional
 
 The last command prints a fictional export for today's UTC date. The example deliberately becomes ineligible after its review date. Successful output is not approval to send it anywhere. Review the exact output and recipient before copying it. See deterministic historical examples in the export guide.
 
-For your separate private instance, run the same tool from this project folder with explicit paths to your copied files. Replace the placeholder folder below with your chosen private folder; keep quotes around paths containing spaces. Edit that instance's `export-policy.json` with a specific purpose and the exact record IDs you intend to consider for sharing.
+For the default private instance, run the same tool from this project folder with explicit paths. For an external instance, replace `private/` below with its absolute path; keep quotes around paths containing spaces. Edit that instance's `export-policy.json` with a specific purpose and the exact record IDs you intend to consider for sharing.
 
 ```sh
-node tools/profile.mjs validate "<private-folder>/records.json"
-node tools/profile.mjs export "<private-folder>/records.json" "<private-folder>/export-policy.json"
+node tools/profile.mjs validate "private/records.json"
+node tools/profile.mjs export "private/records.json" "private/export-policy.json"
 ```
 
 An empty register or allowlist is valid and exports no statements. To check the generic project before distributing a copy, run `node tools/check-repository.mjs`. Never redirect output over either input file: shell redirection may truncate it before the tool runs.
