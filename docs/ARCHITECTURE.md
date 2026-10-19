@@ -12,7 +12,7 @@ A lifelong, human-owned record that remains useful without AI or a hosted app. E
 
 ## Boundaries and data flow
 
-`templates/` is the reusable empty source. A person copies it to a protected location outside this project. Markdown holds the complete optional narrative; `records.json` holds only independently reviewed statements that may be considered for export. It is a curated register, not a second automatically synchronized copy of every notebook. Update both intentionally; disagreements block sharing until resolved.
+`templates/` is the reusable empty source. The initializer copies it to this checkout's ignored root `private/` by default, or to an explicitly selected protected external location. Only `private/` may contain personal content inside the checkout; reusable templates and other tracked files remain generic. Ignore rules do not provide encryption or access control. Markdown holds the complete optional narrative; `records.json` holds only independently reviewed statements that may be considered for export. It is a curated register, not a second automatically synchronized copy of every notebook. Update both intentionally; disagreements block sharing until resolved.
 
 `examples/fictional/` demonstrates a fictional person and decision correction. `schema/` describes the register. `tools/profile.mjs` validates and exports only explicitly allowlisted IDs. It never reads notebooks or follows provenance links. Output is JSON so statement text cannot escape a Markdown boundary; it remains untrusted data to a consumer.
 

@@ -3,8 +3,9 @@ import { dirname, isAbsolute, join, parse, relative, resolve, sep } from 'node:p
 import { fileURLToPath } from 'node:url';
 
 const PROJECT=resolve(fileURLToPath(new URL('..',import.meta.url)));
+const DEFAULT_PRIVATE=join(PROJECT,'private');
 const MARKER={instance_version:'0.1.0',kind:'life-profile-private'};
-const DOMAINS=['stable-profile','current-context','values','goals-projects','learning-skills','relationships','preferences','decisions-experiences','work-contribution','home-daily-life','health-optional','finance-optional','life-admin-optional'];
+const DOMAINS=['basic','current-context','values','goals-projects','learning-skills','relationships','preferences','decisions-experiences','work-contribution','home-daily-life','health-optional','finance-optional','life-admin-optional'];
 const FILES=['INDEX.md','records.json','export-policy.json','ASSISTANT-GUIDE.md','START-HERE.md','SETUP-PROGRESS.md','drafts/README.md','notes/README.md',...DOMAINS.map(name=>`domains/${name}.md`)];
 export function stop(code){throw new Error(code);}
 
@@ -16,14 +17,21 @@ function outsideProject(path){const rel=relative(PROJECT,path);return rel==='..'
 export function privateDirectory(path){
  if(typeof path!=='string'||!isAbsolute(path)||/^[\\/]{2}/.test(path))stop('ABSOLUTE_NON_UNC_PATH_REQUIRED');
  const full=resolve(path);
- if(!outsideProject(full))stop('DESTINATION_INSIDE_PROJECT');
+ const inPrivate=full===DEFAULT_PRIVATE||full.startsWith(DEFAULT_PRIVATE+sep);
+ if(!outsideProject(full)&&!inPrivate)stop('DESTINATION_INSIDE_PROJECT');
+ return checkedDirectory(full,inPrivate);
+}
+
+function checkedDirectory(full,inPrivate){
  const root=parse(full).root;let current=root;
  const parts=relative(root,full).split(sep).filter(Boolean);
  for(const part of ['',...parts]){
   if(part)current=join(current,part);
   const stat=statIfPresent(current);
   if(!stat||!stat.isDirectory()||stat.isSymbolicLink())stop('UNSAFE_OR_MISSING_DIRECTORY');
-  if(statIfPresent(join(current,'.git')))stop('DESTINATION_INSIDE_GIT');
+  // Only this checkout's Git marker is exempted for its private subtree.
+  // Other Git ancestors and nested repositories remain forbidden.
+  if(statIfPresent(join(current,'.git'))&&!(inPrivate&&current===PROJECT))stop('DESTINATION_INSIDE_GIT');
  }
  return full;
 }
@@ -42,11 +50,14 @@ export function privateInstance(dest){
  return root;
 }
 
-export function initProfile(dest){
+export function initProfile(dest=DEFAULT_PRIVATE){
  if(typeof dest!=='string'||!isAbsolute(dest)||/^[\\/]{2}/.test(dest))stop('ABSOLUTE_NON_UNC_PATH_REQUIRED');
  const root=resolve(dest);
- if(!outsideProject(root))stop('DESTINATION_INSIDE_PROJECT');
- privateDirectory(dirname(root));
+ if(root===DEFAULT_PRIVATE)checkedDirectory(PROJECT,true);
+ else{
+  if(!outsideProject(root))stop('DESTINATION_INSIDE_PROJECT');
+  privateDirectory(dirname(root));
+ }
  if(statIfPresent(root))stop('DESTINATION_EXISTS');
  // Read only the manifest before making a directory; examples can never be copied.
  const contents=FILES.map(name=>{

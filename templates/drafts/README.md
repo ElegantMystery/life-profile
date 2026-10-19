@@ -11,7 +11,7 @@ The draft envelope is distinct from the register:
 }
 ```
 
-An empty draft is a format illustration, not a valid confirmation candidate. Each candidate uses all the existing register fields: id, domain, statement, source {kind, reference}, confirmation, sensitivity, subject, status, created, updated, review_due, expires and supersedes. Refer to schema/README.md in the separate tools checkout for enums and date rules.
+An empty draft is a format illustration, not a valid confirmation candidate. Each candidate uses all the existing register fields: id, domain, statement, source {kind, reference}, confirmation, sensitivity, subject, status, created, updated, review_due, expires and supersedes. Refer to schema/README.md in the tools checkout for enums and date rules.
 
 Candidates must have `confirmation: pending`, `status: active` and sensitivity `private`, `sensitive` or `unknown`. Use `private` unless a stricter/unknown label is appropriate. Creation and update dates cannot be in the future. Source kind and uncertain wording must reflect evidence. Null review/expiry dates are permitted, but a null review date makes a record ineligible for export.
 

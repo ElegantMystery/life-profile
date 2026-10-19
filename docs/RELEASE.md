@@ -2,7 +2,8 @@
 
 - [x] Owner selected MIT; see LICENSE and LICENSE-DECISION.md for attribution and contribution guidance.
 - [x] Recheck upstream files and license notices at pinned commits; no upstream material was copied.
-- [ ] Publish from a fresh copy of the generic template, never from a private instance.
+- [ ] Publish from a fresh copy of the generic template, never from a private instance or a whole working folder containing `private/`.
+- [ ] Verify `/private/` is ignored and `git ls-files -- private` is empty; inspect archive contents because ignore rules do not filter ordinary zip tools. The repository checker deliberately skips root `private/`.
 - [ ] Inspect all files, hidden files, Git history, examples, exported bundles and release archives.
 - [ ] Run tests and local link checks; scan for secrets, identifiers and private URLs; inspect manually.
 - [ ] Confirm every example is clearly fictional, with no imported real-world profile content.
