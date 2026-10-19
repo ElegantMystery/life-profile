@@ -3,7 +3,7 @@ Version 0.1.0 — a portable, Markdown-first life profile template. [MIT license
 
 A personal record you can maintain for decades in ordinary text files. Use it without AI, or share a small reviewed excerpt for one task. Empty sections are valid. This project contains no real personal profile.
 
-## Start in fifteen minutes
+## Start in 15 minutes
 
 1. Read [privacy boundaries](docs/PRIVACY.md) and [AI-guided setup](docs/AI-SETUP.md). Use your existing coding assistant; no new model API or account is needed. Local files may still be processed by a cloud-backed assistant when you give it access.
 2. From this project folder, run `node tools/setup.mjs init`. It creates **`private/` at the root of this tools checkout**, covered by the root-anchored `/private/` rule in `.gitignore`. The destination must not already exist. To choose another location, use `node tools/setup.mjs init --dest "<absolute-new-private-folder>"`; other destinations must be outside this project and other Git working trees, with an existing parent. Only empty templates and guides are copied. Verify backing storage yourself: mapped drives, network mounts and cloud sync are not detected. No encryption or Windows access controls are configured.
@@ -24,7 +24,7 @@ A new instance contains structure, prompts and empty fields only: zero profile r
 - [Architecture and tradeoffs](docs/ARCHITECTURE.md), [implementation plan](docs/PLAN.md).
 - [Export guide](docs/EXPORTS.md), [migration guide](docs/MIGRATIONS.md).
 - [References and license observations](docs/INSPIRATION.md).
-- [Release checklist](docs/RELEASE.md), [license decision](LICENSE-DECISION.md).
+- [Release checklist](docs/RELEASE.md).
 - [Verification record](docs/VERIFICATION.md).
 - [Independent review and limitations](docs/REVIEW.md).
 

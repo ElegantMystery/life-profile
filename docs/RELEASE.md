@@ -1,6 +1,6 @@
 # Public release review
 
-- [x] Owner selected MIT; see LICENSE and LICENSE-DECISION.md for attribution and contribution guidance.
+- [x] Owner selected MIT; see [LICENSE](../LICENSE) for attribution and license terms.
 - [x] Recheck upstream files and license notices at pinned commits; no upstream material was copied.
 - [ ] Publish from a fresh copy of the generic template, never from a private instance or a whole working folder containing `private/`.
 - [ ] Verify `/private/` is ignored and `git ls-files -- private` is empty; inspect archive contents because ignore rules do not filter ordinary zip tools. The repository checker deliberately skips root `private/`.
