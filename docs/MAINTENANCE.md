@@ -1,25 +1,26 @@
 # Maintenance and correction
 
-## Capture -> review -> use -> retire
+## Ordinary notebook updates
 
-1. Capture the minimum needed in a private notebook. Record date, source kind, source reference and your uncertainty. Missing knowledge stays unknown.
-2. Review wording and sensitivity yourself. Separate direct user statements from third-party reports and AI inferences. Confirmation is not proof of objective truth.
-3. If sharing may be useful, create a single-purpose register statement with a stable ID, domain, provenance, confirmation state, subject, sensitivity and dates. Private narrative is never automatically imported.
-4. Validate the whole register. Select explicit IDs for a named task. Inspect the resulting export; context combinations can reveal more than individual statements.
-5. Review when circumstances change or at the recorded date. Renew dates only after checking the content. Expiry means no longer usable; review date means recheck before reuse. Due-today entries are excluded.
-6. Retire completed context and goals. Archive only what has continuing value; delete what does not.
+During setup or profile maintenance, save useful non-sensitive answers and preferences incrementally without item-by-item approval. Use short Markdown sections, verify each write and briefly report changes. Apply explicit corrections directly; preserve unrelated text. Exclude sensitive/security details under [privacy rules](PRIVACY.md), including from progress and logs. An AI inference stays labeled as an inference. No ID or metadata form is required for an ordinary note.
 
-Suggested review rhythms, not obligations: current context every few weeks; goals each season; stable preferences yearly; optional sensitive material only as needed. At life transitions, revisit assumptions without rewriting earlier experiences as if you always knew the outcome.
+When an import conflicts with an established user fact, keep the fact and ask a concrete clarification while saving unrelated safe items. A direct user correction is sufficient to update the note. Do not repeat known or skipped interview questions. Outside an active interview, update at natural pauses without distracting from the user's task.
+
+## Optional structured register and exports
+
+The remainder concerns the separately curated `records.json`, not a prerequisite for saving notebook answers. Do not automatically synchronize notes into it. When structured records are useful, use the direct-save contract; the answer itself is sufficient, not an approval token. Preserve schema, supersession and concurrent-write validation. Local saving never grants sharing permission; leave export policy unchanged unless separately instructed.
+
+Review the content before reuse or export, validate the register, and select explicit IDs for a named purpose. Renew dates only after checking the claim. Retire outdated context; preserve only useful non-sensitive history. Private notebooks are never automatically imported or exported.
 
 ## Contradictions and supersession
 
 Do not choose the newest statement automatically. Mark conflicting entries disputed (or keep new drafts pending), remove them from export policies and ask the person to resolve the difference. Scope differences explicitly, such as work versus leisure.
 
-When resolved, create a new entry whose `supersedes` contains the old ID; mark the old entry `superseded`. Keep original creation/provenance, update its modified date, and explain the correction in a private notebook. The validator checks reference integrity; it cannot detect semantic contradictions. A superseded entry cannot be exported. An inference remains an inference even if confirmed: restate as a new user statement when appropriate.
+An explicit user correction resolves the difference without another approval. Create a new entry whose `supersedes` contains the old ID; mark the old entry `superseded`. Keep original creation/provenance, update its modified date, and explain the correction in a private notebook. The validator checks reference integrity; it cannot detect semantic contradictions. A superseded entry cannot be exported. An inference remains an inference even if confirmed: restate as a new user statement when appropriate.
 
 ## Notebook record block
 
-For each meaningful notebook claim, use this optional block (not parsed by the tool):
+Only if maintaining a structured claim alongside notes, this optional reference block may help (not parsed by the tool). It is not needed for ordinary notebook saves:
 
 - Record ID:
 - Statement or event:

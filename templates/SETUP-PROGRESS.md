@@ -1,14 +1,12 @@
-# Optional setup progress
+# Setup progress
 
-No interview has been completed. All modules are optional; blank means not recorded.
-The assistant may update this file only within agreed private write scope. Keep it short, reference opaque IDs and omit answer text. A skipped module stays skipped until the person asks to revisit it.
+The agent updates this short continuity note while saving ordinary answers. No separate approval is needed. Do not copy answers, raw imports, sensitive/security details or transcript excerpts here. A skipped topic stays skipped until the user asks to revisit it.
 
-- Current module:
-- State (not-started / in-progress / skipped / paused / reviewed):
-- Last reviewed date:
-- Next question (omit sensitive specifics):
-- Related note/draft IDs:
-- Skipped modules:
-- Update-proposal frequency preference:
+- Current topic:
+- State (not-started / in-progress / skipped / paused / covered):
+- Last updated:
+- Next specific question (safe wording only):
+- Relevant notebook paths:
+- Skipped topics:
 
-Copy a block per module only when useful. This is a manual continuity note, not an automatic scheduler or claim register.
+Blank means unknown. Resume from useful gaps; do not restart the basics. This is a local note, not a scheduler or structured record register.

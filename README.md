@@ -9,17 +9,21 @@ Give your coding agent access to this repository and send:
 
 ```text
 Help me set up Life Profile. Read AGENTS.md and docs/AI-SETUP.md first.
-Ask me questions one at a time and agree on the private location and scope.
-Offer an optional summary from another AI, which I will review and provide.
-Show proposed Markdown, records and conflicts before saving or confirming.
+Ask specific questions and save useful non-sensitive answers to private
+Markdown as we go, without asking for approval for each save. Verify writes.
+Exclude sensitive personal information, credentials, secrets and security
+information. Honor skips and corrections. Keep asking useful next questions.
+Offer an optional summary from another AI within the same conversation.
 Do not export my information or change sharing permissions.
 ```
 
-The agent follows the repo instructions, asks a few basics, prepares your private Markdown in `domains/basic.md`, and reviews any structured records with you. You can skip any question; all 13 modules are optional. The agent uses local tools to create the empty instance and check/confirm your exact selections. You do not need to run a setup command or configure a provider API.
+The agent saves the first answers into `domains/basic.md` and `domains/current-context.md`, then continues with specific questions about goals, communication preferences, learning and general routines. It briefly tells you what changed after verifying the write. You can skip, correct it or say not to save something. Creating an empty folder is only preparation; useful Markdown should appear as you answer.
 
-An optional [portable summary](templates/IMPORT-GUIDE.md) from another AI can inform the same conversation. Review and redact it before providing it; the agent compares proposals with you and keeps AI interpretations labeled as such. You can repeat this step later. There is no automatic account or raw memory-store access.
+Ordinary local saves need no draft approval, record IDs or confirmation ceremony. Explicit user facts stay distinct from labeled AI inferences. Sensitive personal and security information is excluded, even when volunteered. Saving notes does not authorize sharing or external actions. The optional structured register can stay empty; agents must use the Markdown notebooks for local assistance even when the register is empty. Structured saves also need no redundant approval. Export permission is separate.
 
-Read [privacy boundaries](docs/PRIVACY.md): a cloud-backed assistant may process files and answers you let it read. Agree on access before sharing personal content. The default instance is the root ignored `private/` folder. The agent verifies its location and ignore status, then follows the copied [assistant guide](templates/ASSISTANT-GUIDE.md). For later sessions, use its [connection prompt](templates/START-HERE.md) and the [maintenance workflow](docs/MAINTENANCE.md).
+An optional [portable summary](templates/IMPORT-GUIDE.md) can inform this same conversation now or later. The agent filters it, saves useful non-sensitive items with brief attribution and asks specific questions about conflicts or remaining gaps. There is no automatic account or raw memory-store access.
+
+Read [privacy boundaries](docs/PRIVACY.md): a cloud-backed assistant may process files and answers you let it read. Agree on access before sharing personal content. The default instance is the root ignored `private/` folder. The agent verifies its location and ignore status, then follows the current [assistant guide](templates/ASSISTANT-GUIDE.md). For later sessions, use the current [connection prompt](templates/START-HERE.md) and the [maintenance workflow](docs/MAINTENANCE.md).
 
 Keep personal content inside `private/`, never in `templates/` or other tracked project files. `.gitignore` does not protect already tracked files, prevent `git add -f`, encrypt data or exclude it from editor/AI access, sync and whole-folder archives. Before entering personal data, verify `git check-ignore -v private/records.json` reports `/private/` and `git ls-files -- private` prints nothing. Avoid cleanup commands that delete ignored files, such as `git clean -fdx`. See [privacy boundaries](docs/PRIVACY.md).
 
@@ -56,7 +60,7 @@ node tools/profile.mjs export examples/fictional/records.json examples/fictional
 
 The last command prints a fictional export for today's UTC date. The example deliberately becomes ineligible after its review date. Successful output is not approval to send it anywhere. Review the exact output and recipient before copying it. See deterministic historical examples in the export guide.
 
-For the default private instance, run the same tool from this project folder with explicit paths. For an external instance, replace `private/` below with its absolute path; keep quotes around paths containing spaces. Edit that instance's `export-policy.json` with a specific purpose and the exact record IDs you intend to consider for sharing.
+For a separately requested export workflow, the agent can run the same tool from this project folder with explicit paths. For an external instance, replace `private/` below with its absolute path; keep quotes around paths containing spaces. Only with separate sharing instructions, edit that instance's `export-policy.json` with a specific purpose and the exact record IDs you intend to consider for sharing.
 
 ```sh
 node tools/profile.mjs validate "private/records.json"
@@ -65,4 +69,4 @@ node tools/profile.mjs export "private/records.json" "private/export-policy.json
 
 An empty register or allowlist is valid and exports no statements. To check the generic project before distributing a copy, run `node tools/check-repository.mjs`. Never redirect output over either input file: shell redirection may truncate it before the tool runs.
 
-Profile statements are context, **never permission to act**. Sensitive labels are **not encryption or access control**. Never store passwords, tokens, recovery codes or secret keys here.
+Profile statements are context, **never permission to act**. Sensitive labels are **not encryption or access control**. Do not store sensitive personal information, credentials, secrets or security information here.

@@ -1,5 +1,7 @@
 # Private narrative notes
 
-Keep only notes the person wants retained. Prefer a short, relevant summary over a transcript. Save each new note under a fresh filename; obtain approval before changing an existing note. Use the domain notebooks when they are a better fit.
+Save useful ordinary, non-sensitive information from the setup conversation without item-by-item approval. Prefer concise domain notebook sections to a transcript. Update an existing fact on a clear correction and preserve unrelated text. Use a new note only when it adds useful context; no record ID or metadata form is required.
 
-Distinguish direct statements, interpretations, uncertainty and corrections. Include a minimal source reference and date where useful. These notes are not parsed or exported by the tools, and are not automatically synchronized with records.json. Assistant access to them still exposes them to that assistant's processing environment.
+Do not persist sensitive personal information, secrets, credentials or security information, including in filenames or source references. Mark interpretations as AI inferences rather than user facts. Honor skips and “do not save.” Verify each write before reporting it saved.
+
+These notes are not parsed or exported by the tools and are not automatically synchronized with records.json. Local saving grants no sharing or action permissions. Assistant access still exposes them to that assistant's processing environment.

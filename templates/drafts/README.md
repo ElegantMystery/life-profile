@@ -1,8 +1,8 @@
-# Private structured proposals
+# Optional structured-save inputs
 
-Drafts are not confirmed records and are not export inputs. Never put personal draft content in the public template checkout. Use a new lowercase opaque filename, such as `basic.json`; letters, digits and hyphens only, starting with a letter. No paths or identifiers about real people in filenames.
+Ordinary setup writes useful non-sensitive answers directly to Markdown. Those notebooks are the usable local profile, even when `records.json` is empty. No item-by-item approval is needed for either Markdown or structured saving. This folder is only an implementation staging area for the optional JSON register, not a user review queue.
 
-The draft envelope is distinct from the register:
+Filter sensitive personal/security content before writing any input file. Do not retain raw imports or transcripts. Use an opaque lowercase filename such as `basic.json`; letters, digits and hyphens only, starting with a letter. Never include personal identifiers in filenames.
 
 ```json
 {
@@ -11,19 +11,18 @@ The draft envelope is distinct from the register:
 }
 ```
 
-An empty draft is a format illustration, not a valid confirmation candidate. Each candidate uses all the existing register fields: id, domain, statement, source {kind, reference}, confirmation, sensitivity, subject, status, created, updated, review_due, expires and supersedes. Refer to schema/README.md in the tools checkout for enums and date rules.
+The empty envelope illustrates the format; saving requires at least one entry. Entries use the existing register fields: id, domain, statement, source {kind, reference}, confirmation, sensitivity, subject, status, created, updated, review_due, expires and supersedes. See schema/README.md in the tools checkout. Do not invent fields or source dates.
 
-Candidates must have `confirmation: pending`, `status: active` and sensitivity `private`, `sensitive` or `unknown`. Use `private` unless a stricter/unknown label is appropriate. Creation and update dates cannot be in the future. Source kind and uncertain wording must reflect evidence. Null review/expiry dates are permitted, but a null review date makes a record ineligible for export.
-
-Use a new opaque ID. `supersedes` may name only existing active register IDs and must be explicitly reviewed; it is not a general merge command. Two candidates cannot retire the same old ID. Do not include already-confirmed candidates in a later proposal. Do not silently overwrite drafts or treat stored drafts as consent.
-
-From the tools checkout:
+Input entries use `confirmation: pending`, `status: active` and `sensitivity: private`. Pending here means not yet registered, not awaiting user approval. Sensitive and unknown sensitivity labels are refused; arbitrary prose still needs agent filtering. Creation/update dates cannot be future dates. Label AI-generated statements `ai_inference`; user answers/corrections are `user_statement`. Preserve uncertainty. Do not require source forms from the user.
 
 ```sh
-node tools/setup.mjs check-draft --dest "<absolute-private-folder>" --draft basic.json
-node tools/setup.mjs confirm --dest "<absolute-private-folder>" --draft basic.json --ids "<approved-id>" --approve "<approval-digest>"
+node tools/setup.mjs save --dest "<absolute-private-folder>" --draft basic.json
 ```
 
-The digest binds the exact draft and current register bytes. Present the full selected statements and metadata to the person before using it. Multiple approved IDs are comma-separated. The command preserves source kind, marks selected entries confirmed and retires only their explicit supersession targets. It leaves notes, draft files and export permissions unchanged. A caller can misuse the command; it does not authenticate consent.
+This validates and saves all entries directly. An optional `--ids "<id>,<another-id>"` selects a subset as an agent implementation detail. No previous check, digest, approval flag or user confirmation exchange is required. `check-draft` is optional read-only validation/debugging and returns candidate IDs. The removed `confirm --approve` flow must not be reintroduced by older copied guides.
 
-After confirmation, retain or remove drafts according to the person's choice. They can contain private information even though they are excluded from exports. If a write is interrupted, inspect the register, `.setup.lock` and `.records.pending`; do not blindly rerun, steal a live lock or discard recoverable content.
+Saved direct user statements become `confirmed`; AI/third-party/unknown-source claims stay `pending` as evidence labels, with no consent gate. Source kinds and uncertainty remain intact. Use a new ID with explicit `supersedes` targets for a direct correction; the tool retires those active records and preserves old provenance. Duplicate IDs/text, unknown fields and ambiguous supersession fail. Unresolved semantic conflicts require a focused question; do not blindly replace an explicit user fact with an inference.
+
+Saving leaves notebooks, the input batch and export policy unchanged. The agent can remove its own completed staging batch after a successful verified save rather than accumulating transcripts. Never resubmit saved IDs; create a fresh batch for remaining/new items. Do not delete pre-existing user files during cleanup. File locks, link checks and concurrent-register checks remain active. After interruption, inspect the register and pending files; never steal a live lock.
+
+No local save grants permission to export, publish, contact others or perform unrelated actions.
