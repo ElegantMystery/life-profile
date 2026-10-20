@@ -1,17 +1,25 @@
 # Life Profile
 Version 0.1.0 — a portable, Markdown-first life profile template. [MIT licensed](LICENSE).
 
-A personal record you can maintain for decades in ordinary text files. Use it without AI, or share a small reviewed excerpt for one task. Empty sections are valid. This project contains no real personal profile.
+A personal record you can maintain for decades in ordinary text files. Set it up with an agent you already use, then keep a small private Markdown profile you control. Empty sections are valid. This project contains no real personal profile.
 
-## Start in 15 minutes
+## Start with your agent
 
-1. Read [privacy boundaries](docs/PRIVACY.md) and [AI-guided setup](docs/AI-SETUP.md). Use your existing coding assistant; no new model API or account is needed. Local files may still be processed by a cloud-backed assistant when you give it access.
-2. From this project folder, run `node tools/setup.mjs init`. It creates **`private/` at the root of this tools checkout**, covered by the root-anchored `/private/` rule in `.gitignore`. The destination must not already exist. To choose another location, use `node tools/setup.mjs init --dest "<absolute-new-private-folder>"`; other destinations must be outside this project and other Git working trees, with an existing parent. Only empty templates and guides are copied. Verify backing storage yourself: mapped drives, network mounts and cloud sync are not detected. No encryption or Windows access controls are configured.
-3. Open the new private instance's START-HERE.md. Explicitly connect your assistant with its session-start prompt so it loads ASSISTANT-GUIDE.md. No global agent configuration is edited automatically.
-4. Answer a few basic questions, or authorize specific context for a small draft. The assistant writes proposals; you correct and select what to keep. [Draft confirmation](docs/AI-SETUP.md) is separate from notes and never grants export permissions. Skip or resume modules whenever useful; all 13 are optional.
-5. Return to your actual work. The copied guide supports occasional relevant update proposals. Review using the [maintenance workflow](docs/MAINTENANCE.md); consult the [fictional walkthrough](examples/fictional/README.md) only as a demonstration.
+Give your coding agent access to this repository and send:
 
-Prefer working without AI or Node? Copy only `templates/` to a protected private folder and edit the Markdown yourself. This manual route has no instance marker; the setup confirmation CLI requires an initialized instance and will not adopt or overwrite a manual folder. The existing validator/exporter still accepts explicit JSON paths.
+```text
+Help me set up Life Profile. Read AGENTS.md and docs/AI-SETUP.md first.
+Ask me questions one at a time and agree on the private location and scope.
+Offer an optional summary from another AI, which I will review and provide.
+Show proposed Markdown, records and conflicts before saving or confirming.
+Do not export my information or change sharing permissions.
+```
+
+The agent follows the repo instructions, asks a few basics, prepares your private Markdown in `domains/basic.md`, and reviews any structured records with you. You can skip any question; all 13 modules are optional. The agent uses local tools to create the empty instance and check/confirm your exact selections. You do not need to run a setup command or configure a provider API.
+
+An optional [portable summary](templates/IMPORT-GUIDE.md) from another AI can inform the same conversation. Review and redact it before providing it; the agent compares proposals with you and keeps AI interpretations labeled as such. You can repeat this step later. There is no automatic account or raw memory-store access.
+
+Read [privacy boundaries](docs/PRIVACY.md): a cloud-backed assistant may process files and answers you let it read. Agree on access before sharing personal content. The default instance is the root ignored `private/` folder. The agent verifies its location and ignore status, then follows the copied [assistant guide](templates/ASSISTANT-GUIDE.md). For later sessions, use its [connection prompt](templates/START-HERE.md) and the [maintenance workflow](docs/MAINTENANCE.md).
 
 Keep personal content inside `private/`, never in `templates/` or other tracked project files. `.gitignore` does not protect already tracked files, prevent `git add -f`, encrypt data or exclude it from editor/AI access, sync and whole-folder archives. Before entering personal data, verify `git check-ignore -v private/records.json` reports `/private/` and `git ls-files -- private` prints nothing. Avoid cleanup commands that delete ignored files, such as `git clean -fdx`. See [privacy boundaries](docs/PRIVACY.md).
 
@@ -20,7 +28,7 @@ A new instance contains structure, prompts and empty fields only: zero profile r
 ## Contents
 
 - [Domain index](templates/INDEX.md): basic profile, context, goals, learning, relationships, values, preferences, decisions and optional life domains.
-- [AI setup and ongoing assistant guide](docs/AI-SETUP.md), [connection prompt](templates/START-HERE.md).
+- [Agent setup instructions](docs/AI-SETUP.md), [agent entry point](AGENTS.md), [connection prompt](templates/START-HERE.md), [optional and repeat imports](templates/IMPORT-GUIDE.md).
 - [Architecture and tradeoffs](docs/ARCHITECTURE.md), [implementation plan](docs/PLAN.md).
 - [Export guide](docs/EXPORTS.md), [migration guide](docs/MIGRATIONS.md).
 - [References and license observations](docs/INSPIRATION.md).
@@ -28,14 +36,14 @@ A new instance contains structure, prompts and empty fields only: zero profile r
 - [Verification record](docs/VERIFICATION.md).
 - [Independent review and limitations](docs/REVIEW.md).
 
-## Optional local tools
+## Agent implementation helpers and developer checks
 
 Node.js 20 or newer; no npm installation, dependencies, server or network access required by the tools.
 
-Open a terminal in the extracted `life-profile` project folder before running these commands. These checks use the empty template and test fixtures; they do not populate a profile.
+Agents and contributors: open a terminal in the extracted `life-profile` project folder before running these commands. These checks use the empty template and test fixtures; they do not populate a profile.
 
 ```sh
-node --test tests/profile.test.mjs tests/setup.test.mjs tests/private-default.test.mjs
+node --test
 node tools/profile.mjs validate templates/records.json
 ```
 

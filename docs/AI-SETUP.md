@@ -1,8 +1,14 @@
-# AI-guided setup for developers
+# Agent-guided setup
 
 Use the coding assistant you already have. Life Profile supplies a portable interview guide and local file tools, not a model or an API integration. **A cloud-backed assistant may send conversation content and files it reads to its provider.** Local plaintext storage is not encryption and does not guarantee local AI processing. Decide what your assistant may read before connecting it.
 
-## 1. Create an empty private instance
+## 1. Begin the guided conversation
+
+The user gives an agent access to this repository and asks it to set up their profile. Read [the agent entry point](../AGENTS.md) and [assistant guide](../templates/ASSISTANT-GUIDE.md). Identify the instructions loaded. Ask one question at a time; agree on the destination, excluded topics, private read scope and permission to save proposed notes/drafts. Repository access alone is not consent to mine files or accounts.
+
+Offer the default ignored root `private/` location and explain storage/provider boundaries. Before any personal content, verify the ignore rule and that no private files are tracked. If an instance already exists, request scoped access to resume it; never run initialization over it. CLI commands below are agent implementation helpers inside this single flow, not user-facing setup alternatives. If Node or write access is unavailable, explain the blocker and keep proposals in the conversation until an authorized destination and working tools are available; do not claim a confirmed instance exists.
+
+## 2. Agent creates the empty private instance
 
 From this project folder, with Node.js 20 or newer:
 
@@ -18,15 +24,15 @@ The destination must not exist, even as an empty folder. Symlink/junction ancest
 
 The initializer requests owner-only POSIX modes; Windows permissions and encryption are not configured. Choose an appropriately protected location. It does not determine whether storage is local, network-backed or cloud-synced and cannot guarantee privacy. The error ABSOLUTE_NON_UNC_PATH_REQUIRED means only that an absolute, non-UNC path spelling is required. If creation fails partway, the new incomplete directory remains for inspection; existing files are never recursively removed. Do not claim it is initialized without the valid marker. Choose a new destination after inspecting/removing only the failed instance's files yourself.
 
-## 2. Explicitly connect your assistant
+## 3. Load the private guide and ask the basics
 
-Open the private instance's START-HERE.md and follow its session-start prompt. Give the assistant access to this folder deliberately; do not broaden it to your whole home directory. Have it identify the loaded ASSISTANT-GUIDE.md before proceeding. Nothing edits global agent configuration. For future sessions, repeat that prompt, or manually add a guide reference to a private project-scoped configuration supported by your assistant. This is not an automatic integration.
+After initialization, the agent loads the private instance's START-HERE.md and ASSISTANT-GUIDE.md within the agreed scope. The user can use the START-HERE.md session-start prompt when returning later. Give the assistant access to this folder deliberately; do not broaden it to your whole home directory. Have it identify the loaded ASSISTANT-GUIDE.md before proceeding. Nothing edits global agent configuration. For future sessions, repeat that prompt, or manually add a guide reference to a private project-scoped configuration supported by your assistant. This is not an automatic integration.
 
-The guide starts with an optional alias/language, current focus and first useful task. Alternatively, authorize exact pasted context or specific files and ask for a small draft. No automatic workspace scan, chat-history import or account connection is provided. The assistant asks, interprets and drafts; the CLI makes no AI requests and has no interactive questionnaire. Stop after the basics and do useful work; all 13 modules are optional.
+The guide starts with an optional alias/language, current focus and first useful task, skipping questions already answered. Within this conversation, offer the optional [summary import step](../templates/IMPORT-GUIDE.md): the user may review and provide a portable summary from another AI or selected context. Follow that guide for provenance, conflicts, retention and repeat imports. Do not promise raw memory-store access or automatically scan workspaces, chat histories or accounts. The assistant asks, interprets and drafts; the CLI makes no AI requests and has no interactive questionnaire. Stop after the basics and do useful work; all 13 modules are optional.
 
-## 3. Review proposals before saving records
+## 4. Review Markdown and proposals before saving records
 
-The assistant can save authorized notes as Markdown and pending candidates under `drafts/`. The basic notebook is `domains/basic.md`; its structured-record domain remains `stable-profile` for compatibility. Existing private instances are never renamed or migrated by setup. Follow the copied drafts/README.md. Drafts use `draft_version`, not `schema_version`, so the existing exporter rejects them. Keep uncertain claims in their original wording and source kind. The register schema remains 0.1.0.
+Show proposed Markdown edits and any conflicts to the user before saving within the agreed write scope; preserve existing notes and clearly label unresolved proposals. The assistant can save authorized notes as Markdown and pending candidates under `drafts/`. The basic notebook is `domains/basic.md`; its structured-record domain remains `stable-profile` for compatibility. Existing private instances are never renamed or migrated by setup. Follow the copied drafts/README.md. Drafts use `draft_version`, not `schema_version`, so the existing exporter rejects them. Keep uncertain claims in their original wording and source kind. The register schema remains 0.1.0.
 
 ```sh
 node tools/setup.mjs check-draft --dest "<absolute-private-folder>" --draft basic.json
@@ -39,7 +45,9 @@ Confirmation validates first, preserves all source labels, admits only private/s
 
 Confirmed drafts are not deleted automatically. For partial approval, prepare a new draft with only unresolved candidates before a later confirmation; reusing confirmed IDs fails safely. Notes and module progress remain independent Markdown files. No new command performs general record edits, dispute resolution or deletion.
 
-## 4. Resume and maintain gradually
+## 5. Resume, repeat imports and maintain gradually
+
+For later summaries, use the same optional import step against the current profile, without reinitializing or automatically overwriting anything. Existing instances can consult the import guide in the tools checkout; copying updated instructions requires permission and must preserve local edits.
 
 The copied guide explains module interviews, minimal SETUP-PROGRESS.md checkpoints and one-at-a-time update proposals. Progress is maintained by the assistant with permission, not by a hidden state machine. Resume from the last agreed topic; skip without filling blanks or repeated prompting. Propose changes only when useful during actual work. No schedule or background monitoring is installed.
 

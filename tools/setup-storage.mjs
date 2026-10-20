@@ -6,7 +6,7 @@ const PROJECT=resolve(fileURLToPath(new URL('..',import.meta.url)));
 const DEFAULT_PRIVATE=join(PROJECT,'private');
 const MARKER={instance_version:'0.1.0',kind:'life-profile-private'};
 const DOMAINS=['basic','current-context','values','goals-projects','learning-skills','relationships','preferences','decisions-experiences','work-contribution','home-daily-life','health-optional','finance-optional','life-admin-optional'];
-const FILES=['INDEX.md','records.json','export-policy.json','ASSISTANT-GUIDE.md','START-HERE.md','SETUP-PROGRESS.md','drafts/README.md','notes/README.md',...DOMAINS.map(name=>`domains/${name}.md`)];
+const FILES=['INDEX.md','records.json','export-policy.json','ASSISTANT-GUIDE.md','IMPORT-GUIDE.md','START-HERE.md','SETUP-PROGRESS.md','drafts/README.md','notes/README.md',...DOMAINS.map(name=>`domains/${name}.md`)];
 export function stop(code){throw new Error(code);}
 
 function statIfPresent(path){try{return lstatSync(path);}catch(error){if(error.code==='ENOENT')return null;throw error;}}
