@@ -1,31 +1,26 @@
 # Continue with your agent
 
-This is your private instance, kept separate from the reusable template files. By default it is the tools checkout's ignored root `private/` folder; it may also be in an explicitly chosen external location. No personal claims have been supplied. Local plaintext files are not encrypted. A cloud-backed assistant may send any content you provide or let it read to its provider. Check that assistant's data handling before continuing. This project makes no model calls itself.
+This private instance contains Markdown notebooks. Your setup request lets the agent save useful ordinary, non-sensitive answers as you go; it should not wait for a final approval ceremony. You can skip, correct or say “do not save.” An initialized empty folder is only the starting structure.
 
-When using the default location, keep the root `/private/` ignore rule intact and verify no private files are tracked before entering personal information. Ignore rules do not prevent force-adds, editor/AI access, cloud sync or whole-folder archives. They also do not protect against cleanup commands that delete ignored files.
+Local files are plaintext. A cloud-backed assistant may process what you let it read. With the default `private/` location, verify the root ignore rule and that no private files are tracked. Ignore rules do not prevent force-adds, sync, AI access, archives or cleanup commands that delete ignored files. Verify backing storage; accepted paths are not proof of local/private storage.
 
-Verify this folder's backing storage before entering personal information. The initializer rejects UNC/double-separator path spellings but does not detect mapped Windows drives, mounted network filesystems or cloud-sync folders. A path accepted by the initializer is not proof that storage is local or private.
+## Session prompt
 
-## Continue after initialization
-
-1. Open this private folder in your existing coding assistant, or explicitly grant access to the specific files you want it to use. Limit private access to this instance rather than granting your whole home directory or every file in the tools checkout.
-2. Paste this session-start request, replacing the folder placeholder with your private folder:
+Give your agent access to this selected instance and the Life Profile tools checkout, then send:
 
 ```text
-Read <private-folder>/ASSISTANT-GUIDE.md and follow its basic setup flow.
-Read SETUP-PROGRESS.md for continuity. Do not scan other files or accounts.
-Ask which profile files are relevant before reading additional private content.
-Ask a few basics and offer the optional IMPORT-GUIDE.md summary step.
-Use only context I explicitly select; review proposed Markdown and conflicts.
-Show proposals and obtain my confirmation before saving structured records.
-Do not export, upload, change agent configuration or act on my behalf.
+Continue my Life Profile setup in <private-folder>.
+Follow the current repository setup/assistant guide; read this instance's
+progress and relevant notes so you do not repeat known or skipped questions.
+Save useful ordinary, non-sensitive answers and corrections to Markdown as
+we go. Do not ask for approval for each local save. Verify writes, briefly
+tell me what changed, and keep asking specific questions with useful choices.
+Exclude sensitive personal information, credentials, secrets and security
+information from every saved file. Honor skips and anything I say not to save.
+Offer the optional summary-import step within this conversation.
+Do not publish, export, message others, change permissions or act on my behalf.
 ```
 
-3. Have the assistant identify the loaded guide path and summarize the boundaries. If it cannot access the folder, stop; do not paste the whole private instance into a public project. You may explicitly share only the guide's generic text and selected answers, understanding the provider's processing.
-4. Point the assistant to the local Life Profile tools checkout to validate drafts and confirm selected records after your explicit approval. Tools are not copied here. With the default location they are in the parent checkout. Keep command paths explicit; draft review and confirmation require the absolute path to this instance.
+If the agent cannot write files, it should explain the blocker instead of claiming that answers were saved. Point it to the current tools checkout for older guide versions, but do not replace your personal notebooks with new templates. Global assistant settings are not edited automatically. For a later session, the agent should resume with a specific next question from progress and existing answers.
 
-## Later sessions
-
-Paste the same request and name the task or module you want to resume. To bring another user-reviewed summary, ask for the optional import step again; compare with current records and review conflicts without reinitializing. This guide is not automatically loaded by every assistant. If your tool supports project-scoped instructions, you may manually add a reference to this guide in a private workspace configuration; review the file and access scope first. Do not put a private path or profile text in a shared repository, and do not edit global configuration merely to connect this instance.
-
-The guide and progress files remain useful when changing assistants. No subscription, server, API key or particular AI vendor is required by Life Profile. Markdown instructions cannot enforce agent behavior or restrict filesystem access.
+Ordinary setup writes the Markdown notebooks directly, and agents use those notebooks for later personalized assistance. `records.json` may stay empty; structured saving is optional and also needs no approval handshake. Sharing permissions remain separate. No API key, provider integration or background process is required. Markdown guidance cannot enforce an agent's behavior or provide access control.

@@ -1,5 +1,7 @@
 # AI-guided setup design and implementation plan
 
+Historical implementation record: the approval-heavy notebook flow below is superseded by [current setup](AI-SETUP.md). Ordinary non-sensitive answers now save directly to Markdown; the old approval/digest handshake is also replaced by direct local structured saves, while file/path/schema/concurrency guards remain. This document is not an active interview guide.
+
 Approved scope: a developer uses their existing coding assistant to build a useful basic profile, then enriches optional modules over time. No embedded model, automatic imports, integrations, sharing, CI or UI. Local storage does not imply local AI processing.
 
 ## Design
