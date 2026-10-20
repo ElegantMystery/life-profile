@@ -1,8 +1,8 @@
 # Gentle onboarding
 
-For developers using an existing coding assistant, start with [AI-guided setup](AI-SETUP.md). The copied guide helps the assistant draft from a few basic answers or explicitly authorized context, then proposes small updates over time. This page remains an optional manual prompt list, not a required form.
+Start with [agent-guided setup](AI-SETUP.md): give your agent repository access and let it follow the instructions. The agent asks a few basic questions, offers an optional [user-provided summary](../templates/IMPORT-GUIDE.md), reviews proposed information and conflicts with you, then prepares your private Markdown and confirms only approved records. This page supplies optional questions for that same conversation, not another setup method or a required form.
 
-You control what is recorded. Skip any question, stop at any time, or keep the answer on paper. Do not import chats, email, contacts, existing notes or account data by default. No AI is needed.
+You control what is recorded. Skip any question or stop at any time. Do not import chats, email, contacts, existing notes or account data by default. A later summary can be reviewed through the same guided flow without restarting setup.
 
 1. What would make this record useful to you in the next month?
 2. What topics should remain outside it entirely?
@@ -11,7 +11,7 @@ You control what is recorded. Skip any question, stop at any time, or keep the a
 5. Which small goal is worth recording, and what would progress look like?
 6. What are you learning, and how would you recognize improvement?
 7. When should you next revisit these answers?
-8. Would any single statement be useful to share for a specific task? Keeping everything private is valid.
+8. Which proposed notes or records should we keep, revise or leave out? Keep export permissions unchanged during setup.
 
 Use your own words. A suggested AI summary starts as an inference and pending confirmation, never a fact. If you independently restate it, create a new user-statement entry and preserve the earlier provenance privately. Do not silently relabel the inference.
 

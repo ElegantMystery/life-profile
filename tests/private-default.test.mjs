@@ -55,6 +55,55 @@ test('private instance supports explicit draft review and confirmation with the 
  for(const args of [['check-draft','--draft','basic.json'],['confirm','--draft','basic.json','--ids','fictional-basic','--approve','0'.repeat(64)]])assert.notEqual(run(...args).status,0);
 });
 
+test('fictional repeat summary import preserves provenance, reviews supersession and rejects stale approval',t=>{
+ const {dest,run}=fixture(t);assert.equal(run('init').status,0);
+ const policy=readFileSync(join(dest,'export-policy.json'),'utf8');
+ assert.deepEqual(json(join(dest,'export-policy.json')).allow_ids,[]);
+ pending(dest);
+ const check=name=>{
+  const result=run('check-draft','--dest',dest,'--draft',name);
+  assert.equal(result.status,0,result.stderr);return JSON.parse(result.stdout);
+ };
+ const confirm=(name,ids,digest)=>run('confirm','--dest',dest,'--draft',name,'--ids',ids,'--approve',digest);
+ const first=check('basic.json');
+ assert.equal(confirm('basic.json','fictional-basic',first.approval_digest).status,0);
+ const original=json(join(dest,'records.json')).entries[0];
+ const imported={...original,id:'fictional-import',statement:'Fictional AI summary suggests the person may now prefer a different alias; uncertain.',source:{kind:'ai_inference',reference:'Fictional user-provided AI summary, item 1; source date unknown'},confirmation:'pending',supersedes:['fictional-basic']};
+ const unresolved={...imported,id:'fictional-unresolved',statement:'Fictional AI summary suggests a possible interest in painting; unverified.',supersedes:[]};
+ const draftPath=join(dest,'drafts','import.json');
+ const write=entries=>writeFileSync(draftPath,JSON.stringify({draft_version:'0.1.0',entries},null,2));
+ write([imported,unresolved]);
+ const checked=check('import.json');
+ assert.deepEqual(checked.candidate_ids,['fictional-import','fictional-unresolved']);
+ const before=readFileSync(join(dest,'records.json'),'utf8');
+ // The agent must review both sides; checking alone cannot resolve a conflict.
+ assert.equal(json(join(dest,'records.json')).entries[0].status,'active');
+ assert.notEqual(confirm('import.json','not-reviewed',checked.approval_digest).status,0);
+ writeFileSync(draftPath,readFileSync(draftPath,'utf8')+'\n');
+ const staleDraft=confirm('import.json','fictional-import',checked.approval_digest);
+ assert.notEqual(staleDraft.status,0);assert.match(staleDraft.stderr,/APPROVAL_DIGEST_REQUIRED_OR_STALE/);
+ assert.equal(readFileSync(join(dest,'records.json'),'utf8'),before);
+ const rechecked=check('import.json');
+ writeFileSync(join(dest,'records.json'),before+'\n');
+ const staleRegister=confirm('import.json','fictional-import',rechecked.approval_digest);
+ assert.notEqual(staleRegister.status,0);assert.match(staleRegister.stderr,/APPROVAL_DIGEST_REQUIRED_OR_STALE/);
+ const approved=confirm('import.json','fictional-import',check('import.json').approval_digest);
+ assert.equal(approved.status,0,approved.stderr);
+ assert.deepEqual(JSON.parse(approved.stdout),{confirmed_ids:['fictional-import'],superseded_ids:['fictional-basic']});
+ const entries=json(join(dest,'records.json')).entries;
+ assert.equal(entries.length,2);assert.equal(entries[0].status,'superseded');
+ assert.deepEqual(entries[0].source,original.source);
+ assert.deepEqual(entries[1].source,imported.source);assert.equal(entries[1].statement,imported.statement);
+ assert.equal(entries[1].confirmation,'confirmed');assert.equal(entries[1].sensitivity,'private');
+ assert.equal(readFileSync(join(dest,'export-policy.json'),'utf8'),policy);
+ assert.equal(json(draftPath).entries[1].confirmation,'pending');
+ // A repeat import cannot silently duplicate a confirmed ID or add provider fields.
+ assert.notEqual(run('check-draft','--dest',dest,'--draft','import.json').status,0);
+ write([{...unresolved,source:{...unresolved.source,provider:'fictional'}}]);
+ assert.notEqual(run('check-draft','--dest',dest,'--draft','import.json').status,0);
+ assert.deepEqual(json(join(dest,'records.json')).entries,entries);
+});
+
 for(const kind of ['empty directory','file','symlink','dangling symlink'])test('default refuses existing '+kind+' without replacing it',t=>{
  const {base,dest,run}=fixture(t),target=join(base,'target');
  if(kind==='empty directory')mkdirSync(dest);
@@ -111,7 +160,7 @@ test('root-anchored private ignore excludes all generated files from ordinary gi
 test('repository checker skips the entire root private folder without reading it',t=>{
  const {dest,checkout,run}=fixture(t);assert.equal(run('init').status,0);
  writeFileSync(join(dest,'invalid.json'),'{ deliberately invalid private test fixture');
- symlinkSync(join(dest,'missing-target'),join(dest,'unreadable-link'));
+ symlinkSync(join(dest,'missing-target'),join(dest,'unreadable-link'),process.platform==='win32'?'junction':'dir');
  const result=spawnSync(process.execPath,['tools/check-repository.mjs'],{cwd:checkout,encoding:'utf8'});
  assert.equal(result.status,0,result.stderr);assert.match(result.stdout,/Checked/);
 });

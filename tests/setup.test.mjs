@@ -23,6 +23,7 @@ test('initializer copies only empty private templates and local assistant guides
  assert.deepEqual(json(join(dest,'export-policy.json')).allow_ids,[]);
  assert.ok(readFileSync(join(dest,'ASSISTANT-GUIDE.md'),'utf8').includes('cloud'));
  assert.ok(existsSync(join(dest,'START-HERE.md')));assert.ok(existsSync(join(dest,'SETUP-PROGRESS.md')));
+ assert.equal(readFileSync(join(dest,'IMPORT-GUIDE.md'),'utf8'),readFileSync(join(project,'templates','IMPORT-GUIDE.md'),'utf8'));
  assert.equal(readdirSync(join(dest,'domains')).length,13);
  for(const name of ['examples','.git','tools']) assert.equal(existsSync(join(dest,name)),false);
  assert.deepEqual(readdirSync(join(dest,'drafts')),['README.md']);
