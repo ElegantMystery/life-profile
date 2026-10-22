@@ -8,7 +8,7 @@ All files are plaintext. Sensitivity labels and .gitignore are not encryption or
 
 ## Automatic local saving and exclusions
 
-The setup request authorizes the agent to save ordinary, useful non-sensitive answers and explicit corrections to the selected private Markdown profile. Item-by-item approval is not needed. Aliases, language, broad work/interests, goals and communication or learning preferences are generally suitable. Respect “skip,” “stop” and “do not save”; use context and judgment rather than collecting every detail.
+The setup request authorizes the agent to save ordinary, useful non-sensitive answers and explicit corrections to the selected private Markdown profile. Item-by-item approval is not needed. Aliases, language, city, ordinary workplace/role, hobbies, sports, shows, food/cooking preferences, broad weekend habits, goals and communication or learning preferences are generally suitable. Do not collect street addresses, precise location patterns, exact workplace locations or confidential workplace details. Respect “skip,” “stop” and “do not save”; use context and judgment rather than collecting every detail.
 
 Do not persist sensitive personal information: health diagnoses/treatment/trauma, intimate details, sensitive identity/belief information, financial balances/debts/account details, legal/identity documents, precise addresses/location patterns, private contact information, confidential work information or private information about others/minors. Do not infer sensitive traits. Skip ambiguous sensitive details rather than saving them as “unknown.”
 

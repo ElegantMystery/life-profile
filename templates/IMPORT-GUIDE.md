@@ -4,7 +4,7 @@ Import is an optional step in the [same guided conversation](ASSISTANT-GUIDE.md)
 
 ## Portable-summary prompt
 
-Offer this prompt for the user to give their other assistant. They can inspect and redact the response before providing selected text. An empty or incomplete summary is fine.
+First offer a brief optional hint that the user can paste a memory summary from another agent into this Life Profile conversation, now or later, or skip it and keep answering questions. If they want help requesting a summary, offer the prompt below for their other assistant. They can inspect and redact the response before providing selected text. An empty or incomplete summary is fine.
 
 ```text
 Create a concise portable Markdown summary of useful, ordinary, non-sensitive
