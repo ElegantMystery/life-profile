@@ -11,7 +11,12 @@ function fixture(t){
  const base=realpathSync(mkdtempSync(join(tmpdir(),'life-profile-default-test-')));
  t.after(()=>rmSync(base,{recursive:true,force:true}));
  const checkout=join(base,'checkout');
- cpSync(project,checkout,{recursive:true,filter:path=>path!==join(project,'.git')&&path!==join(project,'private')});
+ // Copy only explicitly scoped, Git-listed public sources, never ignored local data.
+ const listed=spawnSync('git',['-C',project,'ls-files','--cached','--others','--exclude-standard','-z','--','tools','tests','templates','schema','docs','examples','.gitignore','README.md','LICENSE','AGENTS.md'],{encoding:'utf8'});
+ assert.equal(listed.status,0,listed.stderr);
+ for(const name of new Set(listed.stdout.split('\0').filter(Boolean))){
+  const source=join(project,name),dest=join(checkout,name);mkdirSync(resolve(dest,'..'),{recursive:true});cpSync(source,dest);
+ }
  const git=(...args)=>spawnSync('git',['-C',checkout,...args],{encoding:'utf8'});
  assert.equal(git('init','--quiet').status,0);
  const run=(...args)=>spawnSync(process.execPath,[join(checkout,'tools/setup.mjs'),...args],{cwd:base,encoding:'utf8'});

@@ -1,5 +1,7 @@
 # Maintenance and correction
 
+For storage selection, separate template/data updates, and explicit migration/rollback, follow [the storage guide](STORAGE.md). Pulling template updates never migrates the data schema or rewrites personal notes.
+
 ## Ordinary notebook updates
 
 During setup or profile maintenance, save useful non-sensitive answers and preferences incrementally without item-by-item approval. Use short Markdown sections, verify each write and briefly report changes. Apply explicit corrections directly; preserve unrelated text. Exclude sensitive/security details under [privacy rules](PRIVACY.md), including from progress and logs. An AI inference stays labeled as an inference. No ID or metadata form is required for an ordinary note.

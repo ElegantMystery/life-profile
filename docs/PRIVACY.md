@@ -6,6 +6,10 @@ Before entering personal content, run `git check-ignore -v private/records.json`
 
 All files are plaintext. Sensitivity labels and .gitignore are not encryption or access control. Choose appropriate device permissions, encryption, backups and sync settings yourself. Inspect editor plugins, search indexes and AI workspace access before opening a private instance. No such controls are installed by this project.
 
+## Separate personal repository
+
+An explicitly bound external data repository is independent of the public template. Its own ignore rules and reviewed file selection must exclude credentials and temporary data. Verify GitHub account, remote destination and PRIVATE visibility at setup and after destination/access changes; ordinary Git operations do not continuously check privacy. Binding is local selection, not upload authorization. See [storage boundaries and migration](STORAGE.md).
+
 ## Automatic local saving and exclusions
 
 The setup request authorizes the agent to save ordinary, useful non-sensitive answers and explicit corrections to the selected private Markdown profile. Item-by-item approval is not needed. Aliases, language, city, ordinary workplace/role, hobbies, sports, shows, food/cooking preferences, broad weekend habits, goals and communication or learning preferences are generally suitable. Do not collect street addresses, precise location patterns, exact workplace locations or confidential workplace details. Respect “skip,” “stop” and “do not save”; use context and judgment rather than collecting every detail.

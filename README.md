@@ -5,7 +5,9 @@ A personal record you can maintain for decades in ordinary text files. Set it up
 
 ## Start with your agent
 
-Give your coding agent access to this repository and send:
+You need a coding agent that can read/write local files and run commands, plus Node.js 20 or newer. Git is needed for repository version history; GitHub access is optional. No npm install or API key is required. Open a local checkout or extracted copy of this repository in your agent; run helper commands from its root (the folder containing `tools/` and `templates/`).
+
+Give your agent this request:
 
 ```text
 Help me set up Life Profile. Read AGENTS.md and docs/AI-SETUP.md first.
@@ -17,15 +19,17 @@ Offer an optional summary from another AI within the same conversation.
 Do not export my information or change sharing permissions.
 ```
 
+For first setup, the agent defaults to local-only `private/`; you may instead choose a separate personal-data directory/repository. It checks for an existing profile before creating one and resumes existing notes without reinitializing. You only need to answer the conversation; the agent handles the commands. See the [first-time storage steps](docs/STORAGE.md#first-time-checklist) for each case, including existing repositories and recovery.
+
 The agent gets to know you through everyday topics such as hobbies, sports, shows, weekends, city, work and food/cooking. It asks one question at a time, skips what it already knows, follows your answers naturally and saves useful details in the relevant Markdown notebooks. These are optional topics, not a fixed questionnaire or a project-planning interview. It briefly tells you what changed after verifying the write. You can skip, correct it or say not to save something. Creating an empty folder is only preparation; useful Markdown should appear as you answer.
 
 Ordinary local saves need no draft approval, record IDs or confirmation ceremony. Explicit user facts stay distinct from labeled AI inferences. Sensitive personal and security information is excluded, even when volunteered. Saving notes does not authorize sharing or external actions. The optional structured register can stay empty; agents must use the Markdown notebooks for local assistance even when the register is empty. Structured saves also need no redundant approval. Export permission is separate.
 
 If you already have a memory summary from another agent, you can paste it into the Life Profile setup conversation now or later. This optional [summary import](templates/IMPORT-GUIDE.md) is a hint within the same conversation; you can skip it and keep answering questions. The agent filters it, saves useful non-sensitive items with brief attribution and asks specific questions about conflicts or remaining gaps. There is no automatic account or raw memory-store access.
 
-Read [privacy boundaries](docs/PRIVACY.md): a cloud-backed assistant may process files and answers you let it read. Agree on access before sharing personal content. The default instance is the root ignored `private/` folder. The agent verifies its location and ignore status, then follows the current [assistant guide](templates/ASSISTANT-GUIDE.md). For later sessions, use the current [connection prompt](templates/START-HERE.md) and the [maintenance workflow](docs/MAINTENANCE.md).
+Read [privacy boundaries](docs/PRIVACY.md): a cloud-backed assistant may process files and answers you let it read. Agree on access before sharing personal content. Without a local binding, the default instance is the root ignored `private/` folder. You can instead bind a separate personal-data directory/repository; see [storage choices](docs/STORAGE.md). Template and personal repositories update independently; no automatic migration or upload occurs. The agent verifies its location and ignore status, then follows the current [assistant guide](templates/ASSISTANT-GUIDE.md). For later sessions, use the current [connection prompt](templates/START-HERE.md) and the [maintenance workflow](docs/MAINTENANCE.md).
 
-Keep personal content inside `private/`, never in `templates/` or other tracked project files. `.gitignore` does not protect already tracked files, prevent `git add -f`, encrypt data or exclude it from editor/AI access, sync and whole-folder archives. Before entering personal data, verify `git check-ignore -v private/records.json` reports `/private/` and `git ls-files -- private` prints nothing. Avoid cleanup commands that delete ignored files, such as `git clean -fdx`. See [privacy boundaries](docs/PRIVACY.md).
+Keep personal content inside the selected private instance (the ignored `private/` or the bound external data directory), never in `templates/` or other tracked code-repository files. `.gitignore` does not protect already tracked files, prevent `git add -f`, encrypt data or exclude it from editor/AI access, sync and whole-folder archives. For local-only storage in a Git checkout, before entering personal data verify `git check-ignore -v private/records.json` reports `/private/` and `git ls-files -- private` prints nothing. Avoid cleanup commands that delete ignored files, such as `git clean -fdx`. See [privacy boundaries](docs/PRIVACY.md).
 
 A new instance contains structure, prompts and empty fields only: zero profile records and an empty export allowlist. No example data is copied, discovered or imported automatically. Keep `examples/fictional/` out of your private instance; its invented statements are never facts about you.
 

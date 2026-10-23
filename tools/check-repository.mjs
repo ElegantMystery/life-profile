@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 const files=[];
 function walk(dir){for(const e of readdirSync(dir,{withFileTypes:true})){
- if(['.git','node_modules'].includes(e.name)||(dir===root&&e.name==='private'&&e.isDirectory())) continue;
+ if((dir===root&&['.life-profile.local.json','.life-profile.local.json.lock','.life-profile.local.json.pending'].includes(e.name))||['.git','node_modules'].includes(e.name)||(dir===root&&e.name==='private'&&e.isDirectory())) continue;
  const p=resolve(dir,e.name);if(e.isSymbolicLink()) throw new Error('Unexpected symlink');
  if(e.isDirectory()) walk(p);else files.push(p);
 }}

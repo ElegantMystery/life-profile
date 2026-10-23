@@ -6,6 +6,8 @@ Local files are plaintext. A cloud-backed assistant may process what you let it 
 
 ## Session prompt
 
+Use `node tools/setup.mjs status` in the tools checkout to resolve a configured external instance or the unbound local default. An explicit selected folder still takes precedence within the storage guards. Resolve binding errors rather than switching folders silently.
+
 Give your agent access to this selected instance and the Life Profile tools checkout, then send:
 
 ```text
