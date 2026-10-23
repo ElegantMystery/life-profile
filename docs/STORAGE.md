@@ -142,9 +142,9 @@ If using a GitHub connector or the website instead of `gh`, create the same empt
 
 ## Everyday sync
 
-Ask the agent: “Sync my Life Profile with its verified private repository.” That request authorizes the necessary reviewed Git commits, pulls and pushes to that destination. It does not authorize public sharing, changing export policy or uploading excluded content. There is no background synchronization; a local notebook save is not a remote backup.
+The README ongoing-use prompt includes routine commits and sync at session start and after profile updates; no per-operation approval is needed. The self-contained [assistant guide](../templates/ASSISTANT-GUIDE.md#routine-private-repository-sync) is the authoritative routine-sync procedure, including automatic reconciliation of compatible concurrent edits. For a one-off sync, ask: “Sync my Life Profile with its verified private repository.” Both cover the necessary reviewed Git commits, pulls, merges and pushes to that destination. It does not authorize public sharing, changing export policy or uploading excluded content. There is no background synchronization; a local notebook save is not a remote backup.
 
-Before a session, sync so the agent reads current notes. After a session, sync again before switching devices. Use one device at a time when practical. In the **personal-data repository**:
+Sync before using profile notes and after each batch of profile updates, rather than waiting for a session-end signal. Use a separate standalone clone per concurrently active agent, or hold exclusive access across the complete edit/sync sequence in a shared clone. The commands below show the linear-history path; use the assistant guide for divergence and bounded retries. In the **personal-data repository**:
 
 1. Inspect `git status --short --branch`, `git remote -v` and the current branch/upstream. Verify destination/visibility during initial setup and whenever the destination or access changes. Stop if a merge/rebase is already in progress or the branch is detached. If no upstream exists, finish the first-push workflow rather than guessing one.
 2. If local edits exist, review them and commit only intended non-sensitive profile paths. Preserve unrelated changes; do not blindly stage everything or auto-stash them. For example, after reviewing a changed preference and progress note:
@@ -167,7 +167,7 @@ Before a session, sync so the agent reads current notes. After a session, sync a
    git -C "/absolute/personal-data" rev-list --left-right --count "HEAD...@{upstream}"
    ```
 
-   These examples use `origin` from initial setup; use the verified upstream remote if the existing repository uses another name. Stop at the first failed command. If both devices made commits, `pull --ff-only` may refuse divergent history. Preserve both sides, compare the affected notes and reconcile deliberately; clarify genuinely conflicting facts. Never reset, force-push or discard notes to make sync pass. Retry verification after reconciliation. Authentication/network failures leave local saves intact; report sync as pending.
+   These examples use `origin` from initial setup; use the verified upstream remote if the existing repository uses another name. Stop at the first failed command. If both devices made commits, `pull --ff-only` may refuse divergent history. Preserve both sides and follow the assistant guide's reviewed merge procedure: automatically reconcile compatible edits and clarify genuinely conflicting facts. Abort a merge you started if ambiguity remains, retaining both committed versions. Never reset, force-push or discard notes to make sync pass. Retry verification after reconciliation. Authentication/network failures leave local saves intact; report sync as pending.
 4. Report success only after successful remote operations, a clean working tree and `0 0` ahead/behind. If offline, say “saved locally; not synced” and retry later.
 
 ## Resume on another device

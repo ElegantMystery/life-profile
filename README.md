@@ -6,7 +6,7 @@ A template for a personal profile you own, kept in readable Markdown files. Your
 
 - **A conversation:** your agent asks one question at a time and saves useful, non-sensitive answers as you go. Skip, correct or say “do not save” anytime.
 - **Your own private repository:** by default, personal notes live in a separate private GitHub repository, apart from this template. Prefer no upload? Ask for local-only storage.
-- **Continuity:** resume from saved notes and sync between devices when you ask. Sync is not automatic.
+- **Continuity:** resume from saved notes. With ongoing use enabled, your agent syncs the private repository at session start and after profile updates; no background service is installed.
 
 ## Get started
 
@@ -52,10 +52,13 @@ ASSISTANT-GUIDE.md inside that folder and use its ongoing-conversation mode.
 Read only notes relevant to my task. I authorize saving useful non-sensitive
 personal facts, lasting preferences and explicit corrections as we talk.
 Verify changes and briefly tell me what was saved. Honor “do not save.”
-Do not start an interview unless I ask. This does not authorize uploads.
+Do not start an interview unless I ask. Automatically commit and sync reviewed
+profile changes to its verified private repository at session start and after
+updates, without asking each time. Reconcile compatible edits from other agents;
+ask only about genuinely conflicting facts. Never force-push or discard work.
 ```
 
-A normal chat message may not carry over to future sessions. Try a new conversation to confirm the agent loads the guide. For an existing profile, ask it to bring the copied guide up to date from this template while preserving your custom instructions and notes.
+For local-only use, replace the sync sentences with “Keep all updates local; do not commit or upload.” A normal chat message may not carry over to future sessions. Try a new conversation to confirm the agent loads the guide. For an existing profile, ask it to bring the copied guide up to date from this template while preserving your custom instructions and notes.
 
 ## What you can keep
 

@@ -8,7 +8,7 @@ Local files are plaintext. A cloud-backed assistant may process what you let it 
 
 Clone the Life Profile tools and your existing private personal repository into separate sibling folders. Do not use `init` on the clone. From the tools checkout run `node tools/setup.mjs bind --dest "<absolute-personal-folder>"`, then `node tools/setup.mjs status`. The ignored binding is local to each device. Give the agent read/write access to both folders. See `docs/STORAGE.md` in the tools checkout for the full clone, validation and sync walkthrough.
 
-Before resuming, ask the agent to sync with the verified private repository so it reads current notes. A local save alone does not upload anything. To sync after your session, say: “Sync my Life Profile with its verified private repository.” This authorizes the reviewed Git operations for that destination, not public sharing or unrelated exports.
+With the ongoing-use routine-sync prompt installed, the agent syncs at session start and after profile updates without a separate request. It follows this instance's assistant guide for concurrent edits and conflict resolution. Otherwise, ask the agent to sync with the verified private repository before resuming so it reads current notes. A local save alone does not upload anything. To sync after your session, say: “Sync my Life Profile with its verified private repository.” This authorizes the reviewed Git operations for that destination, not public sharing or unrelated exports.
 
 ## Session prompt
 
