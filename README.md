@@ -42,6 +42,21 @@ Later, ask **“Continue my Life Profile”** or **“Sync my Life Profile with 
 
 Keep sensitive information and secrets out of your profile. Files are plaintext, and a cloud-backed agent may process what you let it read. See [privacy details](docs/PRIVACY.md).
 
+## Use it in everyday conversations
+
+After setup, add this to your coding agent's global instructions, or send it to your personal AI agent and ask it to retain it using its supported persistent instructions. Replace `<profile-path>` with the absolute profile folder in that agent's workspace; no GitHub link is needed.
+
+```text
+My Life Profile is at <profile-path>. At the start of each session, read
+ASSISTANT-GUIDE.md inside that folder and use its ongoing-conversation mode.
+Read only notes relevant to my task. I authorize saving useful non-sensitive
+personal facts, lasting preferences and explicit corrections as we talk.
+Verify changes and briefly tell me what was saved. Honor “do not save.”
+Do not start an interview unless I ask. This does not authorize uploads.
+```
+
+A normal chat message may not carry over to future sessions. Try a new conversation to confirm the agent loads the guide. For an existing profile, ask it to bring the copied guide up to date from this template while preserving your custom instructions and notes.
+
 ## What you can keep
 
 Each module is a Markdown notebook. Use whichever are helpful; all are optional.
