@@ -2,6 +2,12 @@
 
 All modules are optional. Empty means not recorded, not absent from your life. Keep completed copies in the private instance: the checkout's ignored root `private/` folder by default, or an explicitly chosen external folder. Never fill in tracked source templates. The agent saves ordinary non-sensitive answers directly under Notes, updates corrections and keeps asking specific questions. No per-claim metadata form is required. Exclude sensitive personal/security information from all modules; optional domain names are not permission to collect sensitive details.
 
+## Coverage at a glance
+
+<!-- At natural pauses, add a few short links to topics actually recorded. No personal facts or sample coverage are prefilled. Empty domains remain optional. Keep facts in their primary notebooks. -->
+
+## Domain notebooks
+
 - [Basic profile](domains/basic.md)
 - [Current context](domains/current-context.md)
 - [Values and meaning](domains/values.md)
