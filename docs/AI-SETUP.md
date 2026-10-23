@@ -36,6 +36,10 @@ Offer [a selected summary import](../templates/IMPORT-GUIDE.md) as an optional s
 
 If a write fails or the agent cannot access file tools, report that answers are not saved, identify the actual blocker and resolve it before collecting more. Never claim setup is complete merely because `init` returned success. Do not rerun initialization or weaken path/security guards to repair a write failure. No real profile should be touched during repository tests; use [the fictional dialogue scenario](SETUP-ACCEPTANCE.md).
 
+## 4. Organize at natural pauses
+
+Follow the assistant guide's source and navigation rules: one primary fact location, brief linked current-context/goals summaries, paragraph-level source labels and honest recorded/as-of dates. Keep unavailable sources unverified. Refresh coverage and the next-question route from saved notes, skipping known/refused topics; do not turn this into a fixed questionnaire or a metadata interview. See [maintenance](MAINTENANCE.md) and the [fictional quality scenarios](PROFILE-QUALITY-ACCEPTANCE.md).
+
 ## Optional structured saving without approvals
 
 Markdown is the effective profile for local assistance. Agents must read relevant notebooks and progress rather than treating an empty `records.json` as an empty profile. The register is optional; do not make it a prerequisite for interview progress or useful personalized help.

@@ -32,6 +32,10 @@ settings. Keep it short enough for me to inspect and redact before sharing.
 
 Markdown is the usable profile for later local assistance; an empty `records.json` does not mean nothing was saved. If structured entries are useful, the agent can also persist them directly with [the save helper](drafts/README.md), without asking the user to approve supplied information again. In that schema use existing `source.kind` and `source.reference`; unknown fields are rejected and AI claims stay `ai_inference`. Do not interpret the legacy `confirmation` field as a consent gate. Keep `export-policy.json` unchanged.
 
+## Source scope and freshness
+
+Group imported facts by their actual source, with a short locator and read date when known. Keep the source's as-of date separate; an old resume's "Present" is not evidence of current employment. Unknown originals stay explicitly unverified, and missing citations/dates stay missing. Attribute AI interpretation separately from the external record. Use existing facts and targeted links for current-context/goals navigation; do not create competing copies. Refresh affected summaries when a direct correction changes the primary note. No broad source crawl or raw-import archive is needed.
+
 ## Repeat imports and older instances
 
 Use the same filter/save/verify/question loop for later summaries without reinitializing the instance. Reuse existing notebook sections and avoid duplicate claims. Keep useful non-sensitive inferred context clearly distinct from direct answers. Do not retain rejected or raw source material for an audit trail.

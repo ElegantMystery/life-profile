@@ -6,6 +6,14 @@ During setup or profile maintenance, save useful non-sensitive answers and prefe
 
 When an import conflicts with an established user fact, keep the fact and ask a concrete clarification while saving unrelated safe items. A direct user correction is sufficient to update the note. Do not repeat known or skipped interview questions. Outside an active interview, update at natural pauses without distracting from the user's task.
 
+## Keep facts findable and sources clear
+
+Keep each fact in one primary notebook section. Current context and goals may contain a short derived summary with a relative link to that section; do not duplicate whole histories or add unstated priorities, deadlines or motivations. When correcting the primary fact, update or remove affected summaries in the same turn. If a fact already exists elsewhere, link to it instead of asking again.
+
+Use one short source line for a paragraph or group of facts from the same source: user answer, external record, AI inference, or source unverified. Include an existing source locator when known and safe. Distinguish the date recorded/read from the date the facts describe; leave unknown dates unknown. A resume read today with an older "Present" entry does not establish current employment. If the original is unavailable, say so; never invent a citation or relabel unmarked legacy notes as direct user answers. Keep interpretations labeled even when accepted. No per-bullet form or source questionnaire is required.
+
+At a natural pause or topic change, refresh the index's brief coverage links from actual notes, not template headings. Empty means not recorded, not absent from the person's life. Choose the next question from the current conversation, a useful simple follow-up, or an unanswered everyday topic. Read relevant notes and skips first; never repeat known/refused topics just to fill the index. Keep the progress question and notebook paths aligned. Update only affected notes and minimal progress per answer; do not scan/rewrite the whole profile each turn.
+
 ## Optional structured register and exports
 
 The remainder concerns the separately curated `records.json`, not a prerequisite for saving notebook answers. Do not automatically synchronize notes into it. When structured records are useful, use the direct-save contract; the answer itself is sufficient, not an approval token. Preserve schema, supersession and concurrent-write validation. Local saving never grants sharing permission; leave export policy unchanged unless separately instructed.
