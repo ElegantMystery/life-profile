@@ -7,3 +7,5 @@ backups/
 .env.*
 node_modules/
 *.zip
+/.life-profile.local.json.lock
+/.life-profile.local.json.pending
