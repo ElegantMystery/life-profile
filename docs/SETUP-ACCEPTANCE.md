@@ -32,3 +32,16 @@ A mixed-input turn saved the safe learning focus while both fictional secret/hea
 An older-instance adoption test used current repository guidance without reinitializing. It saved first answers, preserved an unrelated notebook paragraph, and kept all three old copied guides byte-identical. No real private profile was read, rewritten or claimed fixed. These are observed agent runs, not universal guarantees; filtering arbitrary prose remains an agent responsibility.
 
 Automated verification on Ubuntu WSL with Node v24.19.0: 109 tests passed, zero failed/skipped. Repository checker passed 56 files and 74 local Markdown links; git diff --check passed. Independent review found no blockers. Review follow-ups added direct-save rejection assertions for unsafe inputs and fixed identical-wording supersession so a direct user restatement can replace an inference while preserving its old provenance. The unchanged storage guards, exporter, schemas and empty policy/register templates were verified against HEAD.
+
+## Private repository and second-device acceptance
+
+Use fictional temporary tool checkouts and data instances only. For local Git verification, substitute a temporary bare remote for GitHub; this verifies commit/push/pull/clone behavior, not GitHub identity or private visibility. Never use a real profile for this scenario.
+
+- Fresh guided setup follows the separate-repository default in `docs/STORAGE.md`, initializes before Git, and binds the data root. Explicit local-only requests still use the local alternative. Existing profiles remain in place.
+- The initial reviewed commit includes `.life-profile.json`, notebook files, progress and policy; it excludes temporary files and raw drafts. A private-repository setup request does not trigger repeated permission requests for each authorized Git command.
+- Push to the fixture remote, clone into a second data folder, and bind from a second tools checkout without running `init`. Status must select the second data path; profile validation must pass. The machine-specific binding must not arrive in the data clone.
+- Add a fictional notebook preference on the second device, commit, pull with `--ff-only` and push. Pull on the first device and verify the preference arrived. Fetch and check a clean tree and zero ahead/behind before reporting synchronization.
+- With commits on both devices, verify that divergent `pull --ff-only` stops without deleting either side. A failed network/authentication operation must be reported as pending sync, never as a successful backup.
+- Resume the fictional interview using saved Markdown/progress with an empty register, without repeating known questions. This agent behavior still requires the dialogue scenario above; passing Git commands alone is insufficient.
+
+For an explicitly authorized GitHub integration check, additionally verify the signed-in account, private destination and fetch/push URLs before uploading fictional content. Do not claim a local bare-remote test validated GitHub permissions.

@@ -1,6 +1,6 @@
 # Domain index
 
-All modules are optional. Empty means not recorded, not absent from your life. Keep completed copies in the private instance: the checkout's ignored root `private/` folder by default, or an explicitly chosen external folder. Never fill in tracked source templates. The agent saves ordinary non-sensitive answers directly under Notes, updates corrections and keeps asking specific questions. No per-claim metadata form is required. Exclude sensitive personal/security information from all modules; optional domain names are not permission to collect sensitive details.
+All modules are optional. Empty means not recorded, not absent from your life. Keep completed copies in the private instance: the separate personal repository by default, or the checkout's ignored root `private/` folder when local-only storage is chosen. Never fill in tracked source templates. The agent saves ordinary non-sensitive answers directly under Notes, updates corrections and keeps asking specific questions. No per-claim metadata form is required. Exclude sensitive personal/security information from all modules; optional domain names are not permission to collect sensitive details.
 
 ## Coverage at a glance
 
