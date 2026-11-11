@@ -18,32 +18,52 @@ function candidate(id='fictional-pref') {return {id,domain:'preferences',stateme
 function draft(dest, entries=[candidate()], name='basic.json') {writeFileSync(join(dest,'drafts',name),JSON.stringify({draft_version:'0.1.0',entries},null,2));return name;}
 function save(dest,name='basic.json',ids=['fictional-pref']){return saveDraft({dest,draftName:name,ids});}
 
-test('initializer copies only empty private templates and local assistant guides',t=>{
- const dest=instance(t);assert.deepEqual(json(join(dest,'records.json')).entries,[]);
+test('initializer creates only private data and state, without instructions or source configuration',t=>{
+ const dest=instance(t);
+ assert.deepEqual(readdirSync(dest).sort(),[
+  '.life-profile.json','INDEX.md','SETUP-PROGRESS.md','domains','drafts','export-policy.json','notes','records.json'
+ ].sort());
+ assert.deepEqual(json(join(dest,'.life-profile.json')),{instance_version:'0.1.0',kind:'life-profile-private'});
+ assert.deepEqual(json(join(dest,'records.json')).entries,[]);
  assert.deepEqual(json(join(dest,'export-policy.json')).allow_ids,[]);
- assert.ok(readFileSync(join(dest,'ASSISTANT-GUIDE.md'),'utf8').includes('cloud'));
- assert.ok(existsSync(join(dest,'START-HERE.md')));assert.ok(existsSync(join(dest,'SETUP-PROGRESS.md')));
- assert.equal(readFileSync(join(dest,'IMPORT-GUIDE.md'),'utf8'),readFileSync(join(project,'templates','IMPORT-GUIDE.md'),'utf8'));
  assert.equal(readdirSync(join(dest,'domains')).length,13);
- for(const name of ['examples','.git','tools']) assert.equal(existsSync(join(dest,name)),false);
- assert.deepEqual(readdirSync(join(dest,'drafts')),['README.md']);
+ assert.deepEqual(readdirSync(join(dest,'drafts')),[]);
+ assert.deepEqual(readdirSync(join(dest,'notes')),[]);
+ // A blank notebook has only headings: no example facts or instruction paragraphs.
+ for(const name of readdirSync(join(dest,'domains'))){
+  const body=readFileSync(join(dest,'domains',name),'utf8');
+  assert.deepEqual(body.split('\n').filter(line=>line.trim()&&!line.startsWith('# ')&&!line.startsWith('## ')),[],name);
+ }
 });
-test('initialized instance includes a portable agent entry point with local guide links',t=>{
- const dest=instance(t),path=join(dest,'AGENTS.md');
- assert.ok(existsSync(path),'new instances must be discoverable when only the data folder is opened');
- const entry=readFileSync(path,'utf8');
- assert.equal(entry,readFileSync(join(project,'templates','PROFILE-AGENTS.md'),'utf8'));
- const links=[...entry.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)].map(match=>match[1].split('#')[0]);
- assert.ok(links.includes('ASSISTANT-GUIDE.md'));
+test('data-only index links resolve within the generated instance',t=>{
+ const dest=instance(t),index=readFileSync(join(dest,'INDEX.md'),'utf8');
+ const links=[...index.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)].map(match=>match[1].split('#')[0]);
+ assert.ok(links.includes('domains/basic.md'));
+ assert.ok(links.includes('records.json'));
  for(const target of links)assert.ok(existsSync(resolve(dest,target)),target);
 });
-test('legacy instances remain usable without the new agent entry point',t=>{
- const dest=instance(t);rmSync(join(dest,'AGENTS.md'),{force:true});
- const before=readFileSync(join(dest,'domains','basic.md'),'utf8');
+test('legacy copied guides and custom policy remain unchanged during normal instance operations',t=>{
+ const dest=instance(t);
+ const legacy={
+  'AGENTS.md':'# Legacy entry point\nRead my existing local guide.\n',
+  'ASSISTANT-GUIDE.md':'# Legacy custom policy\nAsk before any sync.\n',
+  'IMPORT-GUIDE.md':'# Legacy import instructions\n',
+  'START-HERE.md':'# Legacy start\n'
+ };
+ for(const [name,body] of Object.entries(legacy))writeFileSync(join(dest,name),body);
+ writeFileSync(join(dest,'domains','basic.md'),'# Fictional profile\n\n## Notes\nExisting fictional alias: River.\n');
+ const paths=[...Object.keys(legacy),'domains/basic.md','SETUP-PROGRESS.md','export-policy.json'];
+ const before=paths.map(name=>readFileSync(join(dest,name),'utf8'));
  assert.equal(privateInstance(dest),dest);
  draft(dest);save(dest);
- assert.equal(readFileSync(join(dest,'domains','basic.md'),'utf8'),before);
- assert.equal(existsSync(join(dest,'AGENTS.md')),false);
+ paths.forEach((name,i)=>assert.equal(readFileSync(join(dest,name),'utf8'),before[i],name));
+ assert.throws(()=>initProfile(dest),{message:'DESTINATION_EXISTS'});
+ paths.forEach((name,i)=>assert.equal(readFileSync(join(dest,name),'utf8'),before[i],name));
+});
+test('instruction-source metadata is not accepted in the unchanged instance marker',t=>{
+ const dest=instance(t);
+ writeFileSync(join(dest,'.life-profile.json'),JSON.stringify({instance_version:'0.1.0',kind:'life-profile-private',instruction_source:'main'}));
+ assert.throws(()=>privateInstance(dest),{message:'INVALID_INSTANCE_MARKER'});
 });
 test('initialization refuses any existing destination without modifying it',t=>{
  const base=sandbox(t);for(const name of ['empty','occupied']){const dest=join(base,name);mkdirSync(dest);if(name==='occupied')writeFileSync(join(dest,'keep.txt'),'keep');assert.throws(()=>initProfile(dest));assert.deepEqual(readdirSync(dest),name==='occupied'?['keep.txt']:[]);}

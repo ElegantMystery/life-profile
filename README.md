@@ -5,6 +5,7 @@ A template for a personal profile you own, kept in readable Markdown files. Your
 ## What to expect
 
 - **A conversation:** your agent asks one question at a time and saves useful, non-sensitive answers as you go. Skip, correct or say “do not save” anytime.
+- **One instruction source:** use this template or your own fork for all behavior. Private instances contain only data. The host keeps the source version and data destination separately.
 - **Your own private repository:** by default, personal notes live in a separate private GitHub repository, apart from this template. Prefer no upload? Ask for local-only storage.
 - **Ongoing use:** setup also connects the profile to your agent’s supported persistent instructions, with your permission, and checks whether a fresh session loads it. Useful updates should then save during ordinary conversations. If the host cannot do this, your agent reports session-only use.
 - **Continuity:** resume from saved notes. Filesystem profiles sync when authorized; direct GitHub saves are already remote commits. Neither mode installs background sync.
@@ -27,17 +28,22 @@ git clone https://github.com/ElegantMystery/life-profile.git
 cd life-profile
 ```
 
+To use your own fork, replace the clone URL and the instruction-source repository in the requests below with that same selected fork. Keep private data and credentials out of a public fork.
+
 **2. In that workspace, send your agent this request:**
 
 ```text
-Help me set up Life Profile. Read AGENTS.md and docs/AI-SETUP.md first.
+Help me set up Life Profile. Use ElegantMystery/life-profile as the instruction
+source. Verify and pin the current reviewed source commit for this setup;
+tell me the resolved commit. Check ordinary-file identities before reading
+AGENTS.md, docs/AI-SETUP.md and supporting guidance at that commit.
 Create a separate private personal repository.
 I authorize creating its private GitHub remote and committing and pushing
 reviewed non-sensitive profile files there.
 Resume my existing profile if I already have one.
 Ask me questions and save useful answers as we go.
 Enable ongoing local profile updates during ordinary conversations.
-Retain the profile path and maintenance instruction using this agent's
+Retain that source commit, profile path and authorized scope using this agent's
 supported persistent instructions, preserving my existing settings.
 Verify fresh-session loading if possible; otherwise tell me what is pending.
 ```
@@ -54,14 +60,17 @@ Give your agent this request, replacing the destination and branch with your cho
 
 ```text
 Help me set up Life Profile using the GitHub connector, not a local clone.
-Read the public template's AGENTS.md and docs/AI-SETUP.md for setup guidance.
+Use ElegantMystery/life-profile as the instruction source. Verify and pin the
+current reviewed source commit. Check ordinary-file identities before reading
+its AGENTS.md, docs/AI-SETUP.md and supporting guidance at that commit.
+Tell me the resolved commit. Keep this source separate from my private data.
 Use private repository <owner/name>, branch <branch>. Verify my account,
 repository identity and private visibility. Resume it if already initialized.
 If it does not exist, I authorize creating this private repository and uploading
 only the reviewed empty profile instance using the connector-only storage guide.
 I authorize reviewed non-sensitive profile updates here as we talk, including
 ongoing uploads and commits. Use version guards and verify remote saves.
-Retain this locator and maintenance instruction through this agent's supported
+Retain that source commit, this data locator and authorized scope through supported
 persistent instructions, preserving existing settings. Verify fresh-session
 loading if possible; otherwise tell me what is pending. Do not switch backend.
 ```
@@ -72,38 +81,15 @@ Keep sensitive information and secrets out of your profile. Files are plaintext,
 
 ## Use it in everyday conversations
 
-Setup now includes activating ongoing use. New private instances contain an `AGENTS.md` entry point for compatible agents opened in that folder. Other workspaces and personal AI agents still need their supported persistent instructions to load the guide; the template cannot make unrelated chats do this.
+Setup includes selecting shared guidance and checking host activation. New private instances contain **no instructions, loader, `AGENTS.md` or source configuration**. Opening only the private folder cannot make an agent load the template. Use the host's supported persistent settings to retain both the selected template/fork version and the data destination, along with permission scope. The [host-binding examples](docs/INSTRUCTION-SOURCE.md#startup-plumbing-not-a-private-loader) cover filesystem and direct GitHub.
 
-For an existing profile or a host that needs manual setup, add the appropriate instruction to its supported persistent scope. **Filesystem:** replace `<profile-path>` with the absolute folder in that agent's workspace.
+The guided setup default is a verified immutable commit, so updates do not silently change your instructions. You may explicitly choose to track a named branch; the agent resolves it once per session and uses that commit throughout. Tracking cannot expand permissions or switch data destinations. See [source selection and offline behavior](docs/INSTRUCTION-SOURCE.md).
 
-```text
-My Life Profile is at <profile-path>. At the start of each session, read
-ASSISTANT-GUIDE.md inside that folder and use its ongoing-conversation mode.
-Read only notes relevant to my task. I authorize saving useful non-sensitive
-personal facts, lasting preferences and explicit corrections as we talk.
-Before finishing a substantive turn, check for useful updates; save and verify
-them, or make no change if nothing useful was learned. Briefly report saves
-or blockers. Honor “do not save,” privacy exclusions and my current instructions.
-Do not start an interview unless I ask. This does not authorize uploads.
-```
+To customize behavior, fork the template and select your fork as the instruction source. Keep private facts, credentials and private data locators out of a public fork. Your fork will not automatically receive upstream fixes; review and integrate them deliberately. There is no separate personal override manual in the private repository or host settings.
 
-**Direct GitHub:** use the verified repository and branch instead of a path. This instruction explicitly authorizes remote writes; use it only if that is what you want.
+A normal chat message may not persist. Setup should report data readiness, source readiness and whether ongoing use is verified, pending a fresh-session check, session-only or declined. A stronger activation check uses a fresh ordinary-task session that does not mention the profile or either locator, then verifies guide loading and authorized save/no-change behavior. Do not invent personal facts for the test. A worker explicitly supplied the guide only tests its behavior, not persistent loading. No template guarantees that every host loads or follows it.
 
-```text
-My Life Profile is in private GitHub repository <owner/name>, branch <branch>.
-Use the authenticated connector. At each session start, verify this instance
-and read its current ASSISTANT-GUIDE.md and only notes relevant to my task.
-I authorize reviewed non-sensitive profile updates to this repository/branch
-as we talk, including uploads and commits. Check each substantive turn for
-useful facts, lasting preferences and corrections. Use guarded writes and
-remote read-back; briefly report verified saves or blockers. Make no change
-when nothing useful changed. Honor “do not save,” privacy exclusions and my
-current instructions. Do not start an interview or switch backend unless asked.
-```
-
-A normal chat message may not carry over to future sessions. Setup should report whether ongoing use was verified, is waiting for a fresh-session check, or is session-only. For a discovery check, ask “Which Life Profile are you using, and what will you save as we talk?” without repeating its locator. A stronger activation check uses a fresh session with an ordinary task that does not mention the profile, then verifies guide loading and authorized save/no-change behavior. Do not invent personal facts to run the test. This checks that host and scope only, not every agent. The agent should save eligible updates during the current turn, leave the profile unchanged when nothing useful was learned, and report blocked saves honestly.
-
-For an existing profile, ask it to merge the current copied guide and private-instance `AGENTS.md` while preserving your custom instructions, routine-sync/permission rules, exclusions and notes. Public template updates do not automatically upgrade the copied instance guide. Do not reinitialize the instance. No template can guarantee that every host loads or follows these instructions; test the host you actually use.
+Existing private profiles are unchanged and remain usable. Public template updates do not remove or replace their copied guides. Ask for a [reviewed migration](docs/MIGRATIONS.md#centralized-instructions-and-data-only-instances) to preserve custom behavior in your selected fork and verify permission scope before switching. Do not reinitialize or delete old files as routine cleanup.
 
 ## What you can keep
 
@@ -137,10 +123,10 @@ You do not need to answer everything from scratch:
 - **Notion plugin:** choose specific pages about your interests, learning or plans.
 - **Another AI:** paste a summary you have reviewed, keeping uncertain details labeled.
 
-Plugins and file support come from your agent, not this template. Choose exactly what it may read; it saves useful non-sensitive notes with source context, rather than copying entire documents. [Import details](templates/IMPORT-GUIDE.md).
+Plugins and file support come from your agent, not this template. Choose exactly what it may read; it saves useful non-sensitive notes with source context, rather than copying entire documents. [Import details](docs/guides/IMPORT-GUIDE.md).
 
 ---
 
-For agents: [setup instructions](docs/AI-SETUP.md) · [storage and sync](docs/STORAGE.md) · [assistant guide](templates/ASSISTANT-GUIDE.md)
+For agents: [setup instructions](docs/AI-SETUP.md) · [storage and sync](docs/STORAGE.md) · [assistant guide](docs/guides/ASSISTANT-GUIDE.md)
 
 [MIT license](LICENSE)
