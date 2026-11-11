@@ -7,11 +7,14 @@ A template for a personal profile you own, kept in readable Markdown files. Your
 - **A conversation:** your agent asks one question at a time and saves useful, non-sensitive answers as you go. Skip, correct or say “do not save” anytime.
 - **Your own private repository:** by default, personal notes live in a separate private GitHub repository, apart from this template. Prefer no upload? Ask for local-only storage.
 - **Ongoing use:** setup also connects the profile to your agent’s supported persistent instructions, with your permission, and checks whether a fresh session loads it. Useful updates should then save during ordinary conversations. If the host cannot do this, your agent reports session-only use.
-- **Continuity:** resume from saved notes and sync between devices when you ask. Sync is not automatic.
+- **Continuity:** resume from saved notes. Filesystem profiles sync when authorized; direct GitHub saves are already remote commits. Neither mode installs background sync.
 
 ## Get started
 
-Use a **coding agent or personal AI agent** that can read and write persistent files and run terminal commands. Its environment needs **Node.js 20+** and **Git**. For private repository syncing, connect your GitHub account to the agent or sign in through GitHub CLI (`gh auth login`).
+Use a **coding agent or personal AI agent** with either:
+
+- **Filesystem access:** persistent file read/write, terminal commands, **Node.js 20+** and **Git**. Private syncing also needs authenticated Git access. Follow the workspace steps below.
+- **An authenticated GitHub connector:** repository/file reads, version-guarded writes and read-back. It can use a private profile directly without a local clone or terminal Git. Use [connector-only setup](#connector-only-setup). Creation needs additional supported tools; access alone does not authorize uploads.
 
 With a cloud-hosted agent, the files may live on its computer rather than your own device.
 
@@ -45,13 +48,33 @@ For **local-only storage**, replace the two sentences about creating a private r
 
 Later, ask **“Continue my Life Profile”** or **“Sync my Life Profile with its private repository.”** Moving to another device? Follow [clone and resume](docs/STORAGE.md#resume-on-another-device).
 
+### Connector-only setup
+
+Give your agent this request, replacing the destination and branch with your choice:
+
+```text
+Help me set up Life Profile using the GitHub connector, not a local clone.
+Read the public template's AGENTS.md and docs/AI-SETUP.md for setup guidance.
+Use private repository <owner/name>, branch <branch>. Verify my account,
+repository identity and private visibility. Resume it if already initialized.
+If it does not exist, I authorize creating this private repository and uploading
+only the reviewed empty profile instance using the connector-only storage guide.
+I authorize reviewed non-sensitive profile updates here as we talk, including
+ongoing uploads and commits. Use version guards and verify remote saves.
+Retain this locator and maintenance instruction through this agent's supported
+persistent instructions, preserving existing settings. Verify fresh-session
+loading if possible; otherwise tell me what is pending. Do not switch backend.
+```
+
+Your agent should check the exact [connector capabilities and bootstrap steps](docs/STORAGE.md#connector-only-private-repository). It must report missing creation, guarded-write or verification tools rather than pretend setup completed. Existing remote instances resume without initialization. You can choose setup-only instead of ongoing use. Local-only permission never authorizes connector writes.
+
 Keep sensitive information and secrets out of your profile. Files are plaintext, and a cloud-backed agent may process what you let it read. See [privacy details](docs/PRIVACY.md).
 
 ## Use it in everyday conversations
 
 Setup now includes activating ongoing use. New private instances contain an `AGENTS.md` entry point for compatible agents opened in that folder. Other workspaces and personal AI agents still need their supported persistent instructions to load the guide; the template cannot make unrelated chats do this.
 
-For an existing profile or a host that needs a manual setup step, add this to the intended agent instruction scope. Replace `<profile-path>` with the absolute profile folder in that agent's workspace; no GitHub link is needed.
+For an existing profile or a host that needs manual setup, add the appropriate instruction to its supported persistent scope. **Filesystem:** replace `<profile-path>` with the absolute folder in that agent's workspace.
 
 ```text
 My Life Profile is at <profile-path>. At the start of each session, read
@@ -64,9 +87,23 @@ or blockers. Honor “do not save,” privacy exclusions and my current instruct
 Do not start an interview unless I ask. This does not authorize uploads.
 ```
 
-A normal chat message may not carry over to future sessions. Setup should report whether ongoing use was verified, is waiting for a fresh-session check, or is session-only. In a new conversation, ask “Which Life Profile are you using, and what will you save as we talk?” without repeating its path. This checks that host and scope only, not every agent. The agent should save eligible updates during the current turn, leave the profile unchanged when nothing useful was learned, and report blocked saves honestly.
+**Direct GitHub:** use the verified repository and branch instead of a path. This instruction explicitly authorizes remote writes; use it only if that is what you want.
 
-For an existing profile, ask it to merge the current copied guide and private-instance `AGENTS.md` while preserving your custom instructions, exclusions and notes. Do not reinitialize the folder. No template can guarantee that every host loads or follows these instructions; test the host you actually use.
+```text
+My Life Profile is in private GitHub repository <owner/name>, branch <branch>.
+Use the authenticated connector. At each session start, verify this instance
+and read its current ASSISTANT-GUIDE.md and only notes relevant to my task.
+I authorize reviewed non-sensitive profile updates to this repository/branch
+as we talk, including uploads and commits. Check each substantive turn for
+useful facts, lasting preferences and corrections. Use guarded writes and
+remote read-back; briefly report verified saves or blockers. Make no change
+when nothing useful changed. Honor “do not save,” privacy exclusions and my
+current instructions. Do not start an interview or switch backend unless asked.
+```
+
+A normal chat message may not carry over to future sessions. Setup should report whether ongoing use was verified, is waiting for a fresh-session check, or is session-only. For a discovery check, ask “Which Life Profile are you using, and what will you save as we talk?” without repeating its locator. A stronger activation check uses a fresh session with an ordinary task that does not mention the profile, then verifies guide loading and authorized save/no-change behavior. Do not invent personal facts to run the test. This checks that host and scope only, not every agent. The agent should save eligible updates during the current turn, leave the profile unchanged when nothing useful was learned, and report blocked saves honestly.
+
+For an existing profile, ask it to merge the current copied guide and private-instance `AGENTS.md` while preserving your custom instructions, routine-sync/permission rules, exclusions and notes. Public template updates do not automatically upgrade the copied instance guide. Do not reinitialize the instance. No template can guarantee that every host loads or follows these instructions; test the host you actually use.
 
 ## What you can keep
 

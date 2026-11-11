@@ -22,4 +22,4 @@ All modules are optional. Empty means not recorded, not absent from your life. K
 - [Finance (optional)](domains/finance-optional.md)
 - [Life administration and legacy (optional)](domains/life-admin-optional.md)
 
-These Markdown notebooks are the usable local profile; readers should consult relevant notebooks even if the register is empty. The optional structured sharing register is [records.json](records.json); [export-policy.json](export-policy.json) starts with an empty allowlist. Neither implies permission to share.
+These Markdown notebooks are the usable profile in either backend; readers should consult relevant notebooks even if the register is empty. The optional structured sharing register is [records.json](records.json); [export-policy.json](export-policy.json) starts with an empty allowlist. Neither implies permission to share.
