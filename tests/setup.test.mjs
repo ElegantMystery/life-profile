@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { initProfile, privateDirectory, replaceRegister } from '../tools/setup-storage.mjs';
+import { initProfile, privateDirectory, privateInstance, replaceRegister } from '../tools/setup-storage.mjs';
 import { inspectDraft, saveDraft } from '../tools/setup-records.mjs';
 import { exportProfile } from '../tools/profile.mjs';
 
@@ -27,6 +27,23 @@ test('initializer copies only empty private templates and local assistant guides
  assert.equal(readdirSync(join(dest,'domains')).length,13);
  for(const name of ['examples','.git','tools']) assert.equal(existsSync(join(dest,name)),false);
  assert.deepEqual(readdirSync(join(dest,'drafts')),['README.md']);
+});
+test('initialized instance includes a portable agent entry point with local guide links',t=>{
+ const dest=instance(t),path=join(dest,'AGENTS.md');
+ assert.ok(existsSync(path),'new instances must be discoverable when only the data folder is opened');
+ const entry=readFileSync(path,'utf8');
+ assert.equal(entry,readFileSync(join(project,'templates','PROFILE-AGENTS.md'),'utf8'));
+ const links=[...entry.matchAll(/\[[^\]]*\]\(([^)]+)\)/g)].map(match=>match[1].split('#')[0]);
+ assert.ok(links.includes('ASSISTANT-GUIDE.md'));
+ for(const target of links)assert.ok(existsSync(resolve(dest,target)),target);
+});
+test('legacy instances remain usable without the new agent entry point',t=>{
+ const dest=instance(t);rmSync(join(dest,'AGENTS.md'),{force:true});
+ const before=readFileSync(join(dest,'domains','basic.md'),'utf8');
+ assert.equal(privateInstance(dest),dest);
+ draft(dest);save(dest);
+ assert.equal(readFileSync(join(dest,'domains','basic.md'),'utf8'),before);
+ assert.equal(existsSync(join(dest,'AGENTS.md')),false);
 });
 test('initialization refuses any existing destination without modifying it',t=>{
  const base=sandbox(t);for(const name of ['empty','occupied']){const dest=join(base,name);mkdirSync(dest);if(name==='occupied')writeFileSync(join(dest,'keep.txt'),'keep');assert.throws(()=>initProfile(dest));assert.deepEqual(readdirSync(dest),name==='occupied'?['keep.txt']:[]);}

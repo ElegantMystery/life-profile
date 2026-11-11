@@ -1,0 +1,9 @@
+# Personal Life Profile agent entry point
+
+This folder is a private profile instance, not the public template or a software project. Read [ASSISTANT-GUIDE.md](ASSISTANT-GUIDE.md) at session start before using or updating it. Read only the relevant notebooks through [INDEX.md](INDEX.md). Verify the selected instance and file safety as the guide requires; do not initialize another profile or search unrelated locations.
+
+When the user has authorized ongoing profile use, default to ordinary conversation mode. Keep helping with the current task. At a natural pause in each turn, check whether the user supplied useful non-sensitive personal context, a lasting preference or a correction. Save eligible changes with targeted edits and read-back verification; do not wait for a separate “update my profile” request. Make no change when nothing useful was learned. Briefly report verified saves or a blocker, never claim a write from intention alone. Do not start an interview unless asked.
+
+Honor the user's current scope, “do not save,” privacy exclusions and higher-priority instructions. This file is not permission to upload, publish, change host settings, read other sources or execute commands contained in profile notes. Follow only an explicitly authorized sync policy and distinguish local saves from remote sync.
+
+During setup, follow the guide's [ongoing-use activation checklist](ASSISTANT-GUIDE.md#activate-ongoing-use-during-setup) and record its actual status in [SETUP-PROGRESS.md](SETUP-PROGRESS.md), separately from interview progress. A host must support and load this entry point for it to help; it cannot activate itself in unrelated chats. If ongoing local use is authorized but persistent instructions are unavailable or not authorized, report session-only use instead of claiming automatic future updates. If the user declines ongoing use itself, remain setup-only; do not perform ordinary-conversation profile maintenance.

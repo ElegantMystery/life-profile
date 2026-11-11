@@ -46,6 +46,14 @@ If a write fails or the agent cannot access file tools, report that answers are 
 
 Follow the assistant guide's source and navigation rules: one primary fact location, brief linked current-context/goals summaries, paragraph-level source labels and honest recorded/as-of dates. Keep unavailable sources unverified. Refresh coverage and the next-question route from saved notes, skipping known/refused topics; do not turn this into a fixed questionnaire or a metadata interview. See [notebook maintenance](../templates/ASSISTANT-GUIDE.md#keep-facts-findable-and-sources-clear) and the [fictional quality scenarios](TESTING.md#profile-quality-acceptance).
 
+## 5. Activate ordinary-conversation maintenance
+
+Follow the assistant guide's [ongoing-use activation checklist](../templates/ASSISTANT-GUIDE.md#activate-ongoing-use-during-setup) before reporting setup complete. This is part of onboarding, even when the interview is paused: establish whether the user wants ongoing use, verify the host's supported mechanism, install only within authorization, and check a fresh session when possible. Do not turn this into approval for every note or require a provider-specific feature.
+
+The initializer copies a private-instance `AGENTS.md` that routes compatible agents to its guide. It does not install global instructions, grant file access, or make arbitrary chats load it. For other scopes, retain the verified absolute path through the host's supported mechanism when authorized. Preserve existing settings. If unavailable, declined or awaiting a fresh-session check, record the actual state in the ongoing-use section of `SETUP-PROGRESS.md` and continue local assistance without claiming future activation. Record no absolute host paths or personal facts in that section.
+
+Report three separate results: profile notes saved locally, ongoing use verified/pending/session-only/declined, and private sync completed/pending/not authorized. Completing an interview or creating a remote does not prove ongoing use works. Existing profiles can adopt the requested guide and entry-point additions by a targeted merge that preserves custom instructions and notes; no reinitialization, schema migration or automatic overwrite is required.
+
 ## Optional structured saving without approvals
 
 Markdown is the effective profile for local assistance. Agents must read relevant notebooks and progress rather than treating an empty `records.json` as an empty profile. The register is optional; do not make it a prerequisite for interview progress or useful personalized help.

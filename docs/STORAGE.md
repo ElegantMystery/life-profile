@@ -110,7 +110,7 @@ When the user sends the README private-repository setup prompt, it explicitly au
 
    ```sh
    git -C "/absolute/personal-data" status --short --untracked-files=all
-   git -C "/absolute/personal-data" add -- .gitignore .life-profile.json INDEX.md records.json export-policy.json ASSISTANT-GUIDE.md IMPORT-GUIDE.md START-HERE.md SETUP-PROGRESS.md domains/ notes/README.md drafts/README.md
+   git -C "/absolute/personal-data" add -- .gitignore .life-profile.json INDEX.md records.json export-policy.json AGENTS.md ASSISTANT-GUIDE.md IMPORT-GUIDE.md START-HERE.md SETUP-PROGRESS.md domains/ notes/README.md drafts/README.md
    git -C "/absolute/personal-data" diff --cached --stat
    git -C "/absolute/personal-data" diff --cached --check
    git -C "/absolute/personal-data" commit -m "Initialize private Life Profile"
@@ -198,6 +198,8 @@ before claiming the notes are current. Read progress and relevant notebooks,
 avoid known or skipped questions, and save useful non-sensitive answers as we go.
 Do not initialize a new profile, publish it, or change export policy.
 ```
+
+After selecting the cloned instance, repeat the [ongoing-use activation check](../templates/ASSISTANT-GUIDE.md#activate-ongoing-use-during-setup) for this host. A status copied from another device does not verify its path or instruction loading here. Configure only the requested host scope and preserve custom instructions.
 
 If the tools or data clone already exists, inspect and update it instead of cloning over it. If offline, explain that only the locally available version can be resumed. Sync after the session before returning to the other device.
 

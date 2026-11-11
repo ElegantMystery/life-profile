@@ -2,7 +2,7 @@
 
 ## Choose the conversation mode
 
-**Ongoing conversations:** when the user installs the README's ongoing-use instruction or asks you to use the profile during ordinary work, follow the ongoing mode below. Stay focused on the current task. Loading this guide or finding unfinished setup progress does not start or resume an interview.
+**Ongoing conversations:** when the user authorizes ongoing use during setup, installs the README's ongoing-use instruction, or asks you to use the profile during ordinary work, follow the ongoing mode below. Stay focused on the current task. Loading this guide or finding unfinished setup progress does not start or resume an interview.
 
 **Setup interview:** only when the user asks to set up, continue the setup interview, or explore their profile, follow the interview turn loop and question examples. A request to correct or remember a fact is an update, not an interview request.
 
@@ -21,6 +21,40 @@ The user's ongoing-use instruction authorizes ordinary non-sensitive local updat
 - **How to save:** read the relevant section first, deduplicate, make a small targeted edit, preserve unrelated text and label sources under the rules below. Read back the result before briefly reporting the save. If a conflict genuinely needs clarification, ask only what is necessary; otherwise continue the user's task.
 - **What not to trigger:** do not ask a profile follow-up after every answer, offer imports automatically, or advance the setup interview's next question. Preserve interview progress and skips; update only relevant notes, affected summaries and index links when needed.
 - **Sync and concurrency:** local saving is separate from commits and uploads. Follow only an explicitly authorized sync policy. Reread before editing and stop rather than overwriting another writer's changes. If safe writing is blocked, say the update was not saved; continue useful work on the main task.
+
+### Required turn checkpoint
+
+While ongoing use is active in this session, check the current turn before its final substantive reply or at an earlier natural pause. Keep this check quiet and brief; do not delay an urgent answer or conflict with higher-priority instructions. Choose the actual outcome:
+
+1. **Saved:** the user supplied eligible new context or an explicit correction. Read the current section, make the smallest useful edit, update affected summaries, then read back and verify. Briefly mention the saved change alongside the task result. Do this in the current turn rather than waiting for a goodbye or another request to update the profile.
+2. **No change:** nothing durable or useful was learned, the fact already matches the notes, the user said not to save, or the detail is excluded. Do not write an audit entry, timestamp, transcript, duplicate or empty update just to prove that a check happened. Do not announce routine no-change outcomes.
+3. **Blocked:** an eligible save cannot be safely completed, or its destination is unavailable. Say it was not saved and why, without echoing excluded content. Continue the main task; do not make a replacement profile, bypass a permission boundary, or promise a later retry without a supported plan. A genuine conflict may need one targeted question.
+
+A local save is not a successful sync. If the user has separately authorized an ongoing sync policy, follow its timing and destination with the storage checks; otherwise keep saves local. Report a sync failure as “saved locally; not synced.” Never create a scheduler or background process merely to satisfy this checkpoint.
+
+### Activate ongoing use during setup
+
+Treat activation as a setup deliverable, not an optional tip left for the user to discover later. The template supplies the contract; the host supplies file access and instruction loading. Do not change global host settings merely because this file asks you to.
+
+1. **Establish scope once.** Explain that useful non-sensitive facts and corrections can be saved during ordinary conversations, without restarting the interview. A request that explicitly includes ongoing use and retaining its instructions authorizes that local workflow; a setup-only request does not authorize host configuration changes. Ask only for the missing choice or permission and honor a setup-only/local-only choice. Uploads need their own scope.
+2. **Check host capability.** Verify the active instance and read/write access. New instances include `AGENTS.md`, which can route a compatible coding agent opened in that folder to this guide. For other workspaces or a personal AI agent, use only its documented, supported persistent instruction mechanism. An ordinary chat acknowledgment, a Git binding or this Markdown file does not establish that future sessions will load it. Do not claim access to hidden agent memory or invent hooks/settings.
+3. **Install within authorization.** Add the following small instruction to the authorized host scope, substituting the verified absolute profile path for that host. Preserve existing instructions and user exclusions; do not replace the whole configuration or expand scope. If the host needs a manual settings step, provide the exact instruction for the user. If no persistent mechanism exists, continue in session-only mode. The path may differ on another device; configure and verify that host separately.
+
+   ```text
+   Use my Life Profile at <absolute-profile-folder> during ordinary conversations.
+   At each session start, read its ASSISTANT-GUIDE.md and relevant notes.
+   Before finishing a substantive turn, check for useful non-sensitive personal
+   facts, lasting preferences and explicit corrections. Save eligible changes,
+   read back to verify, and briefly report saves or blockers. Do not write when
+   nothing useful changed. Honor “do not save,” privacy exclusions and my current
+   instructions. Stay on my task; do not start an interview unless I ask.
+   This authorizes local notebook updates, not uploads or other external actions.
+   ```
+
+4. **Verify rather than assume.** Read back the installed instruction when the host permits it. In a fresh session in the intended scope, verify that the host loads this instance's guide without the user repeating the path. A separate one-off request that explicitly tells a worker to read the guide only tests guide behavior, not persistent loading. When the fresh-session check cannot be run, mark activation pending and give the user a short test to run: “Which Life Profile are you using, and what will you save as we talk?” Do not invent a verification result or seed personal facts for testing. Confirm a real authorized save by read-back when an eligible fact next arrives.
+5. **Record the result.** Update only the minimal ongoing-use section of `SETUP-PROGRESS.md`: host/scope label, status, verification date when actually checked, and safe next step/blocker if needed. This is a readiness note, not a grant of permission, activity log or place for machine-specific paths/credentials. Preserve interview progress. Report local profile readiness, ongoing-use activation, and any private sync separately. “Installed; fresh-session check pending” and “session-only” are valid outcomes, not completed cross-session activation.
+
+Statuses are per tested host/scope. Recheck activation after moving devices, changing the path or changing the host's instruction settings; do not reuse a stale verified status as evidence. A user who declines ongoing use stays setup-only until they request it. New template instructions do not upgrade existing copies automatically: merge requested guide/entry-point changes without replacing notebooks, custom instructions or exclusions; never rerun `init` over the instance. No schema change is needed.
 
 ## Save as the conversation progresses
 
