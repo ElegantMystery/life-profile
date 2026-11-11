@@ -6,6 +6,7 @@ A template for a personal profile you own, kept in readable Markdown files. Your
 
 - **A conversation:** your agent asks one question at a time and saves useful, non-sensitive answers as you go. Skip, correct or say “do not save” anytime.
 - **Your own private repository:** by default, personal notes live in a separate private GitHub repository, apart from this template. Prefer no upload? Ask for local-only storage.
+- **Ongoing use:** setup also connects the profile to your agent’s supported persistent instructions, with your permission, and checks whether a fresh session loads it. Useful updates should then save during ordinary conversations. If the host cannot do this, your agent reports session-only use.
 - **Continuity:** resume from saved notes and sync between devices when you ask. Sync is not automatic.
 
 ## Get started
@@ -32,6 +33,10 @@ I authorize creating its private GitHub remote and committing and pushing
 reviewed non-sensitive profile files there.
 Resume my existing profile if I already have one.
 Ask me questions and save useful answers as we go.
+Enable ongoing local profile updates during ordinary conversations.
+Retain the profile path and maintenance instruction using this agent's
+supported persistent instructions, preserving my existing settings.
+Verify fresh-session loading if possible; otherwise tell me what is pending.
 ```
 
 For **local-only storage**, replace the two sentences about creating a private repository and authorizing uploads with: “Keep my profile local only. Do not create a GitHub remote or upload my notes.” Keep the instruction to resume an existing profile.
@@ -44,18 +49,24 @@ Keep sensitive information and secrets out of your profile. Files are plaintext,
 
 ## Use it in everyday conversations
 
-After setup, add this to your coding agent's global instructions, or send it to your personal AI agent and ask it to retain it using its supported persistent instructions. Replace `<profile-path>` with the absolute profile folder in that agent's workspace; no GitHub link is needed.
+Setup now includes activating ongoing use. New private instances contain an `AGENTS.md` entry point for compatible agents opened in that folder. Other workspaces and personal AI agents still need their supported persistent instructions to load the guide; the template cannot make unrelated chats do this.
+
+For an existing profile or a host that needs a manual setup step, add this to the intended agent instruction scope. Replace `<profile-path>` with the absolute profile folder in that agent's workspace; no GitHub link is needed.
 
 ```text
 My Life Profile is at <profile-path>. At the start of each session, read
 ASSISTANT-GUIDE.md inside that folder and use its ongoing-conversation mode.
 Read only notes relevant to my task. I authorize saving useful non-sensitive
 personal facts, lasting preferences and explicit corrections as we talk.
-Verify changes and briefly tell me what was saved. Honor “do not save.”
+Before finishing a substantive turn, check for useful updates; save and verify
+them, or make no change if nothing useful was learned. Briefly report saves
+or blockers. Honor “do not save,” privacy exclusions and my current instructions.
 Do not start an interview unless I ask. This does not authorize uploads.
 ```
 
-A normal chat message may not carry over to future sessions. Try a new conversation to confirm the agent loads the guide. For an existing profile, ask it to bring the copied guide up to date from this template while preserving your custom instructions and notes.
+A normal chat message may not carry over to future sessions. Setup should report whether ongoing use was verified, is waiting for a fresh-session check, or is session-only. In a new conversation, ask “Which Life Profile are you using, and what will you save as we talk?” without repeating its path. This checks that host and scope only, not every agent. The agent should save eligible updates during the current turn, leave the profile unchanged when nothing useful was learned, and report blocked saves honestly.
+
+For an existing profile, ask it to merge the current copied guide and private-instance `AGENTS.md` while preserving your custom instructions, exclusions and notes. Do not reinitialize the folder. No template can guarantee that every host loads or follows these instructions; test the host you actually use.
 
 ## What you can keep
 
