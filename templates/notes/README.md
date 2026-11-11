@@ -1,7 +1,3 @@
-# Private narrative notes
+# Moved to shared guidance
 
-Save useful ordinary, non-sensitive information from the setup conversation without item-by-item approval. Prefer concise domain notebook sections to a transcript. Update an existing fact on a clear correction and preserve unrelated text. Use a new note only when it adds useful context; no record ID or metadata form is required.
-
-Do not persist sensitive personal information, secrets, credentials or security information, including in filenames or source references. Mark interpretations as AI inferences rather than user facts. Honor skips and “do not save.” Verify each write before reporting it saved.
-
-These notes are not parsed or exported by the tools and are not automatically synchronized with records.json. Local saving grants no sharing or action permissions. Assistant access still exposes them to that assistant's processing environment.
+See [the current guide](../../docs/guides/NARRATIVE-NOTES.md) in this template or your selected fork. This public compatibility pointer is not copied into private instances. Existing private copies are unchanged; switching them requires a [reviewed migration](../../docs/MIGRATIONS.md#centralized-instructions-and-data-only-instances).

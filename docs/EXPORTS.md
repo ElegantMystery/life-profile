@@ -19,7 +19,7 @@ Before sharing, read every emitted value, verify it serves this recipient and ta
 
 ## Optional structured register and exports
 
-This section concerns the separately curated `records.json`, not a prerequisite for saving notebook answers. For ordinary notes, follow the [assistant guide](../templates/ASSISTANT-GUIDE.md). Do not automatically synchronize notes into it. When structured records are useful, use the [direct-save contract](../templates/drafts/README.md); the answer itself is sufficient, not an approval token. Preserve schema, supersession and concurrent-write validation. Local saving never grants sharing permission; leave export policy unchanged unless separately instructed.
+This section concerns the separately curated `records.json`, not a prerequisite for saving notebook answers. For ordinary notes, follow the [assistant guide](guides/ASSISTANT-GUIDE.md). Do not automatically synchronize notes into it. When structured records are useful, use the [direct-save contract](guides/STRUCTURED-SAVE.md); the answer itself is sufficient, not an approval token. Preserve schema, supersession and concurrent-write validation. Local saving never grants sharing permission; leave export policy unchanged unless separately instructed.
 
 Review the content before reuse or export, validate the register, and select explicit IDs for a named purpose. Renew dates only after checking the claim. Retire outdated context; preserve only useful non-sensitive history. Private notebooks are never automatically imported or exported.
 

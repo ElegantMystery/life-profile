@@ -118,3 +118,26 @@ test('documented existing-instance and malformed-binding recovery never recreate
  ok(f.run('bind','--dest',f.data));ok(f.run('status'));assert.deepEqual(fileBytes(f.data),before);
  const validation=spawnSync(process.execPath,[join(f.code,'tools/profile.mjs'),'validate',join(f.data,'records.json')],{cwd:f.base,encoding:'utf8'});ok(validation);
 });
+
+test('data-only Git clone binds without empty directories and saves after safe staging creation',t=>{
+ const f=fixture(t);ok(f.run('init','--dest',f.data));
+ ok(f.git(f.data,'init','-q'));ok(f.git(f.data,'add','--all'));
+ ok(f.git(f.data,'-c','user.name=Fictional fixture','-c','user.email=fixture@invalid','commit','-qm','Fictional empty profile'));
+ const clone=join(f.base,'cloned-data');ok(f.git(f.base,'clone','-q',f.data,clone));
+ const initial=fileBytes(clone);
+ assert.equal(Object.keys(initial).length,18,'only data and state files persist in Git');
+ assert.equal(existsSync(join(clone,'drafts')),false);
+ assert.equal(existsSync(join(clone,'notes')),false);
+ ok(f.run('bind','--dest',clone));
+ assert.deepEqual(JSON.parse(f.run('status').stdout),{destination:clone,mode:'external'});
+ assert.deepEqual(fileBytes(clone),initial,'binding does not install instructions or directories');
+ bad(f.run('save','--draft','test.json'));
+ assert.deepEqual(fileBytes(clone),initial,'missing staging data must not modify the instance');
+ mkdirSync(join(clone,'drafts'),{mode:0o700});draft(clone);
+ ok(f.run('save','--draft','test.json'));
+ assert.equal(JSON.parse(readFileSync(join(clone,'records.json'))).entries[0].statement,'Fictional person enjoys ceramics.');
+ const after=fileBytes(clone);
+ for(const [path,bytes] of Object.entries(initial))if(path!=='records.json')assert.equal(after[path],bytes,path);
+ assert.equal(existsSync(join(clone,'AGENTS.md')),false);
+ assert.deepEqual(readdirSync(join(clone,'drafts')),['test.json']);
+});

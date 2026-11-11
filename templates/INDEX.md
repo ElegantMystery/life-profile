@@ -1,10 +1,6 @@
 # Domain index
 
-All modules are optional. Empty means not recorded, not absent from your life. Keep completed copies in the private instance: the separate personal repository by default, or the checkout's ignored root `private/` folder when local-only storage is chosen. Never fill in tracked source templates. The agent saves ordinary non-sensitive answers directly under Notes, updates corrections and keeps asking specific questions. No per-claim metadata form is required. Exclude sensitive personal/security information from all modules; optional domain names are not permission to collect sensitive details.
-
 ## Coverage at a glance
-
-<!-- At natural pauses, add a few short links to topics actually recorded. No personal facts or sample coverage are prefilled. Empty domains remain optional. Keep facts in their primary notebooks. -->
 
 ## Domain notebooks
 
@@ -22,4 +18,7 @@ All modules are optional. Empty means not recorded, not absent from your life. K
 - [Finance (optional)](domains/finance-optional.md)
 - [Life administration and legacy (optional)](domains/life-admin-optional.md)
 
-These Markdown notebooks are the usable profile in either backend; readers should consult relevant notebooks even if the register is empty. The optional structured sharing register is [records.json](records.json); [export-policy.json](export-policy.json) starts with an empty allowlist. Neither implies permission to share.
+## Structured data
+
+- [Records](records.json)
+- [Export policy](export-policy.json)

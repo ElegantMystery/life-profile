@@ -8,7 +8,7 @@ const DEFAULT_PRIVATE=join(PROJECT,'private');
 const CONFIG=join(PROJECT,'.life-profile.local.json');
 const MARKER={instance_version:'0.1.0',kind:'life-profile-private'};
 const DOMAINS=['basic','current-context','values','goals-projects','learning-skills','relationships','preferences','decisions-experiences','work-contribution','home-daily-life','health-optional','finance-optional','life-admin-optional'];
-const FILES=['AGENTS.md','INDEX.md','records.json','export-policy.json','ASSISTANT-GUIDE.md','IMPORT-GUIDE.md','START-HERE.md','SETUP-PROGRESS.md','drafts/README.md','notes/README.md',...DOMAINS.map(name=>`domains/${name}.md`)];
+const FILES=['INDEX.md','records.json','export-policy.json','SETUP-PROGRESS.md',...DOMAINS.map(name=>`domains/${name}.md`)];
 export function stop(code){throw new Error(code);}
 
 function statIfPresent(path){try{return lstatSync(path);}catch(error){if(error.code==='ENOENT')return null;throw error;}}
@@ -145,8 +145,8 @@ export function initProfile(dest){
  if(statIfPresent(root))stop('DESTINATION_EXISTS');
  // Read only the manifest before making a directory; examples can never be copied.
  const contents=FILES.map(name=>{
-  // Keep the bootstrap inert in the public source tree; activate it only in an instance.
-  const source=join(PROJECT,'templates',name==='AGENTS.md'?'PROFILE-AGENTS.md':name);const stat=lstatSync(source);
+  // Instructions stay in the selected template or fork, never in private data.
+  const source=join(PROJECT,'templates',name);const stat=lstatSync(source);
   if(!stat.isFile()||stat.isSymbolicLink())stop('UNSAFE_TEMPLATE');
   return [name,readFileSync(source,'utf8')];
  });
