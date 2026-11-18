@@ -22,13 +22,16 @@ function locate(root,name) {
   return path;
 }
 
-// Checks layout only. The caller separately verifies repository provenance,
+// Checks layout and availability. The caller separately verifies repository provenance,
 // compatible *behavior*, permission scope and host activation at this commit.
 export function checkSource(checkout,commit) {
   if (!checkout || !isAbsolute(checkout) || !/^[0-9a-f]{40}$/.test(commit ?? '')) stop('FULL_SOURCE_COMMIT_REQUIRED');
   const env = {...process.env};
   for (const key of Object.keys(env)) if (key.startsWith('GIT_')) delete env[key];
-  const git = args => execFileSync('git',['--no-replace-objects','-C',checkout,...args],{env,encoding:'utf8',stdio:['ignore','pipe','pipe']});
+  // Source verification uses only local objects, including on older Git versions.
+  env.GIT_NO_LAZY_FETCH = '1';
+  env.GIT_ALLOW_PROTOCOL = '';
+  const git = (args, stdout='pipe') => execFileSync('git',['--no-replace-objects','-C',checkout,...args],{env,encoding:'utf8',stdio:['ignore',stdout,'pipe']});
   let entries;
   try {
     if (realpathSync(git(['rev-parse','--show-toplevel']).trim()) !== realpathSync(checkout)) stop('SOURCE_UNAVAILABLE');
@@ -37,6 +40,9 @@ export function checkSource(checkout,commit) {
   } catch { stop('SOURCE_UNAVAILABLE'); }
   for (const name of requiredSource) {
     if (!entries.some(line => /^100(644|755) blob [a-f0-9]+\t/.test(line) && line.split('\t')[1] === name)) stop('INCOMPATIBLE_SOURCE_LAYOUT');
+    // A tree can still list a blob that is missing from the checkout.
+    try { git(['cat-file','blob',commit+':'+name],'ignore'); }
+    catch { stop('SOURCE_UNAVAILABLE'); }
   }
   return commit;
 }

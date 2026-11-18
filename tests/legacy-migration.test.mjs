@@ -59,6 +59,20 @@ test('unavailable, incompatible or linked source and stale review preserve the l
   assert.throws(()=>f.retire({...file,name:'domains/basic.md'}),{message:'REVIEWED_GUIDE_REQUIRED'});
 });
 
+test('retirement preserves the legacy guide when a pinned source blob is unavailable',t=>{
+  const f=fixture(t);
+  const path=join(f.root,'ASSISTANT-GUIDE.md');
+  writeFileSync(path,'Fictional custom restriction');
+  const [file]=f.inspect().files;
+  const blob=execFileSync('git',['-C',f.source,'rev-parse',f.good+':AGENTS.md'],{encoding:'utf8'}).trim();
+  const object=join(f.source,'.git','objects',blob.slice(0,2),blob.slice(2));
+  renameSync(object,object+'.unavailable');
+
+  assert.throws(()=>f.retire(file),{message:'SOURCE_UNAVAILABLE'});
+  assert.equal(readFileSync(path,'utf8'),'Fictional custom restriction');
+  assert.equal(existsSync(join(f.backup,file.name)),false);
+});
+
 test('diagnosis fails closed for linked legacy paths and optional directory redirection',t=>{
   const f=fixture(t);
   symlinkSync('INDEX.md',join(f.root,'AGENTS.md'));
