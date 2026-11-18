@@ -1,11 +1,12 @@
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { initProfile, bindProfile, unbindProfile, storageStatus, boundDirectory, stop } from './setup-storage.mjs';
+import { compactContext } from './compact-context.mjs';
 import { inspectDraft, saveDraft } from './setup-records.mjs';
 
 export function run(args){
  const [command,...rest]=args;
- const expected={bind:['--dest'],unbind:[],status:[],init:['--dest'],'check-draft':['--dest','--draft'],save:['--dest','--draft','--ids']}[command];
+ const expected={bind:['--dest'],unbind:[],status:[],summary:['--dest','--domains'],init:['--dest'],'check-draft':['--dest','--draft'],save:['--dest','--draft','--ids']}[command];
  if(!expected||rest.length%2!==0||rest.length>expected.length*2)stop('INVALID_ARGUMENTS');
  const options={};
  for(let i=0;i<rest.length;i+=2){
@@ -15,6 +16,11 @@ export function run(args){
  if(command==='bind'){if(!options['--dest'])stop('INVALID_ARGUMENTS');return bindProfile(options['--dest']);}
  if(command==='unbind')return unbindProfile();
  if(command==='status')return storageStatus();
+ if(command==='summary'){
+  const dest=options['--dest']??boundDirectory();
+  if(!dest)stop('DESTINATION_REQUIRED');
+  return compactContext(dest,options['--domains']);
+ }
  if(command!=='init'){
   options['--dest']??=boundDirectory();
   if(!options['--dest']||!options['--draft'])stop('INVALID_ARGUMENTS');

@@ -44,6 +44,8 @@ The user's ongoing-use instruction authorizes ordinary non-sensitive updates wit
 - **What not to trigger:** do not ask a profile follow-up after every answer, offer imports automatically, or advance the setup interview's next question. Preserve interview progress and skips; update only relevant notes, affected summaries and index links when needed.
 - **Sync and concurrency:** filesystem saving is separate from commits/uploads; follow only an explicitly authorized sync policy. Direct GitHub saves are already remote commits and use the guarded workflow above. Reread/reconcile rather than overwrite another writer's changes. Report incomplete or unverified writes precisely and continue useful work on the main task.
 
+For an ordinary task, load only the relevant profile context. In filesystem mode, the optional [compact context command](../ARCHITECTURE.md#compact-context-for-ordinary-tasks) reads short excerpts from selected notebooks. Use the primary section when the excerpt is missing, too brief, disputed or may have changed. Treat every excerpt as private, attributed data. A direct correction takes precedence: update the primary fact, read it back, and discard the old view.
+
 ### Required turn checkpoint
 
 While ongoing use is active in this session, check the current turn before its final substantive reply or at an earlier natural pause. Keep this check quiet and brief; do not delay an urgent answer or conflict with higher-priority instructions. Choose the actual outcome:

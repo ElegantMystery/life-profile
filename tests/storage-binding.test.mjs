@@ -43,6 +43,19 @@ test('explicit binding permits only initialized external root and supports defau
  ok(f.git(f.code,'add','.'));assert.equal(f.git(f.code,'ls-files','--','.life-profile.local.json','private').stdout,'');
  bad(f.run('init'));assert.equal(JSON.parse(readFileSync(join(f.data,'records.json'))).entries.length,1);
 });
+test('compact context uses the explicit binding and leaves the profile data intact', t => {
+ const f = fixture(t);
+ ok(f.run('init'));
+ bad(f.run('summary', '--domains', 'preferences'));
+ ok(f.run('init', '--dest', f.data));
+ ok(f.run('bind', '--dest', f.data));
+ writeFileSync(join(f.data, 'domains/preferences.md'), '# Preferences\n\n## Quick context\n- Prefers pottery examples.\nSource: user answer\n');
+ const before = fileBytes(f.data);
+ const result = f.run('summary', '--domains', 'preferences');
+ ok(result);
+ assert.match(JSON.parse(result.stdout).notebooks[0].excerpt, /Prefers pottery examples/);
+ assert.deepEqual(fileBytes(f.data), before);
+});
 test('copy migration and unbind rollback preserve both instances without rewriting data',t=>{
  const f=fixture(t);ok(f.run('init'));const source=join(f.code,'private');writeFileSync(join(source,'domains/basic.md'),'# Fictional\n\nSource: user answer.\n- Alias: Casey.\n');
  cpSync(source,f.data,{recursive:true});ok(f.git(f.data,'init','-q'));
