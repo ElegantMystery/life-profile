@@ -1,12 +1,37 @@
 # Separate template and personal storage
 
-Keep the public code/template checkout and personal data separate. For new users, default to **a separate personal-data repository with a PRIVATE GitHub remote**. Keep the code and data in sibling folders. **Local-only** storage is an explicit alternative. Resume existing instances in place; changing this recommendation does not migrate them. If GitHub is unavailable, prepare the separate local repository and explain that remote sync is pending; do not block useful local profile saving on a connection. These are storage choices within the same agent-led setup, not new onboarding methods.
+Keep the public code/template checkout and personal data separate. For new users, default to **a separate personal-data repository with a PRIVATE GitHub remote**. In filesystem mode, keep the code and data in sibling folders. Connector-only agents can instead use [direct GitHub storage](#connector-only-private-repository) without a local clone. **Local-only** storage is an explicit alternative. Resume existing instances in place; changing this recommendation does not migrate them. In filesystem mode, if GitHub is unavailable, prepare the separate local repository and explain that remote sync is pending; do not block useful authorized local saving. In connector mode, report the missing remote capability instead of silently changing storage. These are storage choices within the same agent-led setup, not new onboarding methods.
+
+## Connector-only private repository
+
+The portable [assistant guide](guides/ASSISTANT-GUIDE.md#direct-github-checks-and-saves) defines ongoing reads, explicit remote-write permission, server-enforced version guards, bounded conflict reconciliation and read-back. It is loaded from the host-selected template or fork at its verified source commit, never copied into new private data. Instruction source and private data destination are independent selections; see [source configuration](INSTRUCTION-SOURCE.md). The CLI remains filesystem-only: do not pass a GitHub URL to `--dest`, invent a local binding, require a durable clone, or weaken a storage guard to use the connector.
+
+### Resume an existing remote instance
+
+1. Obtain the selected `owner/name` and branch. Verify the authenticated account through supported service account/connection metadata (repository ownership or push permission does not identify the caller), exact repository identity, PRIVATE visibility and branch with the service. A URL, display name, cached guide or connector connection is insufficient. If caller identity is unavailable, report that specific check as pending separately from repository identity/private visibility; do not infer it from the owner or claim complete verification. Do not change visibility, permissions or repository protections to make access work.
+2. Resolve the branch to a commit, inspect the selected paths' Git tree metadata there to rule out symlinks/submodules (ordinary file blob modes, not `120000` or `160000`), and fetch contents by the verified commit/blob IDs. A mutable file-content endpoint can follow a symlink introduced after the check. Repeat this path/type check at each newly fetched head during reconciliation and read-back. If the connector cannot establish safe file identity, report the verification gap rather than following a link. Read the valid `.life-profile.json` marker and data index, then only relevant notebooks/progress. Missing expected structure needs deliberate recovery, not initialization over existing data.
+3. Follow the host-selected shared guide/version and the user's current authorization. New remote instances have no private guide or entry point; legacy instances remain usable with their existing workflow until a requested [reviewed migration](MIGRATIONS.md#centralized-instructions-and-data-only-instances). Preserve custom behavior in the selected fork and verify permission scope separately. Public updates and copied legacy permission prose grant no new authorization.
+4. Verify connector capabilities before offering ongoing remote writes: reads exposing current versions, guarded updates and remote read-back. For multi-file corrections, prefer an atomic commit with an actual expected-head guard; otherwise verify/report each guarded sequential save separately. Follow the assistant guide on conflicts or uncertain responses. Never claim tested API behavior from local Git tests.
+
+### Bootstrap a new private remote instance
+
+New setup needs an explicit request to create the chosen private repository and upload the reviewed empty instance, plus a grant for subsequent personal-note uploads. An ordinary local setup request is not enough. Ask only for missing destination/scope. Use supported authenticated tools; do not invent an endpoint, manufacture access or request broader account authority.
+
+1. **Pin the generic source.** Read the selected template or fork's setup guidance and initializer manifest in `tools/setup-storage.mjs` at one reviewed source commit. Prepare the same empty instance that `init` produces, not a copy of the whole public repository. If an ephemeral workspace with Node.js is available, run `init` into a new safe directory and review only its generated files. This needs no authenticated terminal Git, durable profile clone or personal local binding. All existing filesystem guards still apply to that staging step.
+2. **For a connector-only host with no terminal,** use supported file-read and create/commit tools to assemble the manifest bytes from that same source commit. Copy only the initializer's explicit `FILES` list from `templates/`: 13 empty domain notebooks, `INDEX.md`, `SETUP-PROGRESS.md`, `records.json` and `export-policy.json`. Verify schema version `0.1.0`, zero record entries and zero allowed export IDs. Use the initializer's exact two-field `MARKER` content for `.life-profile.json` only for this new instance. This produces **18 persisted files** including the marker. Do not upload guides, `AGENTS.md`, loaders, source configuration or READMEs with instructions. Git cannot preserve empty directories: `drafts/` and `notes/` are optional until actual staging/note data is written; do not add instructional README or placeholder files to simulate them. This is new-instance generation, never recovery/adoption of an existing folder.
+3. **Create and verify the destination.** Using a supported private-repository creation operation, create only the named PRIVATE repository, then read its identity/visibility back before uploading. Do not use “generate from template” if it copies tools/examples/history or an entire source tree. Do not initialize competing history with a generated README/license. If the target already exists, inspect it: resume a valid profile, or use the selected empty repository only when that target and its initialization are authorized. Never overwrite populated unrelated contents. Honor a different existing branch rather than guessing `main`.
+4. **Upload and verify only the reviewed manifest.** Use supported guarded creation/update operations: create-if-absent paths or an expected empty/current branch head, including create-ref absence semantics for a new branch. Do not overwrite an existing file from stale source data. Prefer one guarded atomic commit of the full empty instance. Otherwise create and read back each file, and add `.life-profile.json` **last**, only after every expected file verifies. Do not upload examples, tools, Git history, raw drafts, environment files, machine bindings or personal data during bootstrap. The filesystem data-repository exclusions below are also useful if a local clone is later explicitly requested; ignore rules do not control API writes.
+5. **Confirm readiness honestly.** Verify the selected remote branch has the expected data-only manifest contents, empty register/export allowlist and valid marker. Compare bytes/hashes with the pinned source, not only a successful commit response. If interrupted, inspect what this authorized bootstrap actually created and resume only missing verified steps; do not call an incomplete repository initialized or blindly recreate it. An unknown/uncertain result must be inspected before retrying. If a required operation is unavailable, report the exact missing capability and completed steps. Offer a supported user-assisted creation/upload or ephemeral generation route, but do not switch backend without agreement.
+
+Only after remote readiness and note-upload authorization are established should the interview begin. Use the [activation checklist](guides/ASSISTANT-GUIDE.md#activate-ongoing-use-during-setup) to retain both instruction source/version and data repository/branch through an authorized supported host mechanism, not inside the private data. A connector is a storage backend, not a host-loading hook. Report remote readiness, verified saves and activation separately; no later Git push is needed for direct API commits. A fresh agent given a locator tests guide behavior, not installed automatic loading.
 
 ## First-time checklist
 
+The checklist below is for filesystem mode.
+
 These are implementation steps for the agent in the same guided setup. Prerequisites: Node.js 20+, file-write access and a terminal; Git for a data repository; an already-authorized GitHub connector or `gh` only if choosing GitHub. No npm installation or server is required.
 
-Run `node --version` and, for repository storage, `git --version`. Run every `node tools/...` command from the **code checkout root**, not the personal-data directory. Use `git -C` for commands targeting the other repository. Replace example paths with the user's selected absolute path and quote paths with spaces. POSIX examples below work in Linux/macOS/WSL; on Windows use a full drive path such as `"D:\Profiles\personal-data"`, not a UNC path. An accepted path alone does not establish private storage.
+Before running setup helpers, verify their code and data-template bytes match the selected instruction-source commit as required by [source selection](INSTRUCTION-SOURCE.md). Preserve dirty/unrelated checkout edits; use a separate verified clean snapshot or report the mismatch. Run `node --version` and, for repository storage, `git --version`. Run every `node tools/...` command from the **code checkout root**, not the personal-data directory. Use `git -C` for commands targeting the other repository. Replace example paths with the user's selected absolute path and quote paths with spaces. POSIX examples below work in Linux/macOS/WSL; on Windows use a full drive path such as `"D:\Profiles\personal-data"`, not a UNC path. An accepted path alone does not establish private storage.
 
 First inspect whether `.life-profile.local.json` or the selected profile already exists; do not print its personal contents. `status` succeeds only for a valid existing selected instance. A fresh checkout with neither binding nor `private/` is expected to fail `status`: choose one of the creation cases below. If a binding or directory already exists but status fails, use [recovery](#recover-a-missing-or-invalid-binding), not creation.
 
@@ -99,18 +124,17 @@ When the user sends the README private-repository setup prompt, it explicitly au
    .life-profile.local.json.lock
    .life-profile.local.json.pending
    drafts/*
-   !drafts/README.md
    exports/
    backups/
    node_modules/
    ```
 
    Do **not** ignore `.life-profile.json`: this instance marker must travel with the profile. Do not ignore all JSON or all hidden files. Ignore rules do not remove already tracked files; inspect the index as well. They are exclusions, not a sensitive-content detector.
-3. Review the files and stage the initialized profile explicitly. For a fresh instance, the following list includes its marker, notebooks, resume instructions and empty export policy. Inspect directory contents before staging them; for an existing instance use only reviewed paths appropriate to its contents.
+3. Review the files and stage the initialized profile explicitly. For a fresh instance, the following list includes its marker, notebooks, progress data and empty export policy. Inspect directory contents before staging them; for an existing instance use only reviewed paths appropriate to its contents.
 
    ```sh
    git -C "/absolute/personal-data" status --short --untracked-files=all
-   git -C "/absolute/personal-data" add -- .gitignore .life-profile.json INDEX.md records.json export-policy.json ASSISTANT-GUIDE.md IMPORT-GUIDE.md START-HERE.md SETUP-PROGRESS.md domains/ notes/README.md drafts/README.md
+   git -C "/absolute/personal-data" add -- .gitignore .life-profile.json INDEX.md records.json export-policy.json SETUP-PROGRESS.md domains/
    git -C "/absolute/personal-data" diff --cached --stat
    git -C "/absolute/personal-data" diff --cached --check
    git -C "/absolute/personal-data" commit -m "Initialize private Life Profile"
@@ -138,46 +162,32 @@ When the user sends the README private-repository setup prompt, it explicitly au
 
    A successful push, clean working tree, and `0 0` comparison after fetch establish that this branch is synchronized at the time checked. A failed push means the local commit exists but remote sync is incomplete. Report that distinction. After the interview has added notes, use the everyday workflow below to upload those new saves too.
 
-If using a GitHub connector or the website instead of `gh`, create the same empty **private** repository, verify the account and destination, add its verified clone URL as the data repo's remote, and perform the same Git push/checks. If authentication is unavailable, leave the separate local repository intact and state what remains pending. Do not silently select another account or public destination.
+For filesystem mode, if using a GitHub connector or the website to create the remote instead of `gh`, create the same empty **private** repository, verify the account and destination, add its verified clone URL as the data repo's remote, and perform the same Git push/checks. If authentication is unavailable, leave the separate local repository intact and state what remains pending. Do not silently select another account or public destination.
 
 ## Everyday sync
 
-The README ongoing-use prompt includes routine commits and sync at session start and after profile updates; no per-operation approval is needed. The self-contained [assistant guide](../templates/ASSISTANT-GUIDE.md#routine-private-repository-sync) is the authoritative routine-sync procedure, including automatic reconciliation of compatible concurrent edits. For a one-off sync, ask: “Sync my Life Profile with its verified private repository.” Both cover the necessary reviewed Git commits, pulls, merges and pushes to that destination. It does not authorize public sharing, changing export policy or uploading excluded content. There is no background synchronization; a local notebook save is not a remote backup.
+This section is for filesystem profiles with a local Git repository. Direct GitHub saves already commit remotely; use the guarded connector workflow above instead of adding a push step. Preserve any existing user-authorized routine-sync policy.
 
-Sync before using profile notes and after each batch of profile updates, rather than waiting for a session-end signal. Use a separate standalone clone per concurrently active agent, or hold exclusive access across the complete edit/sync sequence in a shared clone. The commands below show the linear-history path; use the assistant guide for divergence and bounded retries. In the **personal-data repository**:
+Ask the agent: “Sync my Life Profile with its verified private repository.” That request authorizes the necessary reviewed Git commits, pulls and pushes to that destination. It does not authorize public sharing, changing export policy or uploading excluded content. There is no background synchronization; a local notebook save is not a remote backup.
 
-1. Inspect `git status --short --branch`, `git remote -v` and the current branch/upstream. Verify destination/visibility during initial setup and whenever the destination or access changes. Stop if a merge/rebase is already in progress or the branch is detached. If no upstream exists, finish the first-push workflow rather than guessing one.
-2. If local edits exist, review them and commit only intended non-sensitive profile paths. Preserve unrelated changes; do not blindly stage everything or auto-stash them. For example, after reviewing a changed preference and progress note:
+With a standing grant, sync at session start before using the notes, and after each batch of profile updates. Use a separate standalone clone for each concurrently active agent. Apply these steps only to the verified personal-data repository:
 
-   ```sh
-   git -C "/absolute/personal-data" add -- domains/preferences.md SETUP-PROGRESS.md
-   git -C "/absolute/personal-data" diff --cached --stat
-   git -C "/absolute/personal-data" diff --cached --check
-   git -C "/absolute/personal-data" commit -m "Update profile notes"
-   ```
-
-   Adapt the paths to the actual changes, including reviewed deletions. Skip the commit when nothing changed. If unrelated uncommitted files remain, resolve their handling before pulling.
-3. With a clean working tree, pull and push:
-
-   ```sh
-   git -C "/absolute/personal-data" pull --ff-only
-   git -C "/absolute/personal-data" push
-   git -C "/absolute/personal-data" fetch origin
-   git -C "/absolute/personal-data" status --short --branch
-   git -C "/absolute/personal-data" rev-list --left-right --count "HEAD...@{upstream}"
-   ```
-
-   These examples use `origin` from initial setup; use the verified upstream remote if the existing repository uses another name. Stop at the first failed command. If both devices made commits, `pull --ff-only` may refuse divergent history. Preserve both sides and follow the assistant guide's reviewed merge procedure: automatically reconcile compatible edits and clarify genuinely conflicting facts. Abort a merge you started if ambiguity remains, retaining both committed versions. Never reset, force-push or discard notes to make sync pass. Retry verification after reconciliation. Authentication/network failures leave local saves intact; report sync as pending.
-4. Report success only after successful remote operations, a clean working tree and `0 0` ahead/behind. If offline, say “saved locally; not synced” and retry later.
+1. Verify the account, PRIVATE repository, fetch and push URLs, local branch and its named upstream. Check for interrupted operations or changes already staged by another writer. Preserve unrelated work and report pending if the clone cannot be used exclusively.
+2. Review intended paths and their contents, including deletions and commits already ahead of upstream. Stage only reviewed, non-sensitive profile files, inspect the entire staged diff, run validation for changed data, and commit with the configured author. Preserve the marker, export policy, exclusions and legacy custom behavior. Defer integration if unrelated dirty files remain.
+3. Fetch the verified remote. From a clean tree, fast-forward if possible. If the tips diverge, use `git merge --no-ff --no-commit "@{upstream}"`. Review both sides against the common ancestor, including changes Git combined cleanly. Keep compatible additions and provenance. A direct correction can settle an older assertion. For ambiguous facts, instructions or delete-versus-edit conflicts, abort only the merge you started, retain both commits and ask one focused question.
+4. Read back affected notes and summaries, validate changed JSON and links, and check for unresolved entries and conflict markers before committing a reviewed merge. Push explicitly to the verified remote and upstream branch using `git push <remote> HEAD:refs/heads/<branch>`. Never force-push or bypass branch rules.
+5. If another writer wins the push race, fetch and repeat reconciliation and validation, with at most three push attempts for this sync. For authentication, network or interrupted-operation failures, preserve local commits and report pending. After a successful push, fetch again and verify a clean tree and `git rev-list --left-right --count "HEAD...@{upstream}"` of `0 0` before reporting sync.
 
 ## Resume on another device
 
+For connector mode, authorize the new host's connector access, verify the same repository/branch, load the separately configured instruction source/version and repeat host activation. No clone or local binding is required. The remaining steps here are for filesystem mode.
+
 First sync the old device if available. Only pushed files can arrive on the new device; unpushed notes remain on the old device. Use a coding agent or personal AI agent with persistent file access, Node.js 20+ and Git in the new workspace, then authenticate to the GitHub account with access to the private repository. For a cloud-hosted agent, run the following commands in its persistent workspace; the folders need not be on the device used to chat with it. Verify its owner/name and private visibility.
 
-From an existing parent directory outside other Git trees, clone into two new sibling folders:
+From an existing parent directory outside other Git trees, clone the selected instruction repository and data repository into two new sibling folders. Verify and select the externally configured source commit before running helpers; a fresh default-branch checkout is not a substitute for an existing pin. Replace both URLs with their independently verified destinations:
 
 ```sh
-git clone https://github.com/ElegantMystery/life-profile.git life-profile
+git clone "<verified-template-or-fork-clone-url>" life-profile
 git clone "<verified-private-repository-clone-url>" life-profile-personal
 cd life-profile
 node tools/setup.mjs bind --dest "/absolute/path/to/life-profile-personal"
@@ -191,13 +201,17 @@ Expected: status reports `mode: "external"` and the cloned data path, validation
 
 ```text
 Continue my Life Profile in <absolute-personal-folder> using the tools at
-<absolute-tools-folder>. Read the current AGENTS.md and docs/AI-SETUP.md.
+<absolute-tools-folder>. Use my separately configured instruction source/version,
+not a newly pulled branch as a substitute for my pin. Read its AGENTS.md and
+docs/AI-SETUP.md at that verified source commit.
 Sync with its verified private repository before reading my notes; I authorize
 the reviewed Git operations for that destination. Resolve any sync failure
 before claiming the notes are current. Read progress and relevant notebooks,
 avoid known or skipped questions, and save useful non-sensitive answers as we go.
 Do not initialize a new profile, publish it, or change export policy.
 ```
+
+After selecting the cloned instance, repeat the [ongoing-use activation check](guides/ASSISTANT-GUIDE.md#activate-ongoing-use-during-setup) for this host. A status copied from another device does not verify its path or instruction loading here. Configure only the requested host scope and preserve custom instructions.
 
 If the tools or data clone already exists, inspect and update it instead of cloning over it. If offline, explain that only the locally available version can be resumed. Sync after the session before returning to the other device.
 
@@ -214,4 +228,4 @@ The copy is a one-time migration, not a snapshot mirror. After acceptance, the e
 
 ## Template updates and data migrations
 
-For updates, inspect each repository's status first and preserve local edits. From a clean code checkout, `git pull --ff-only` updates the template. Separately, `git -C "/absolute/personal-data" pull --ff-only` updates personal history only if that repository has a configured upstream. A local-only repository needs no pull. Stop and reconcile divergent history or local changes; do not reset, force-push or overwrite notes to make an update work. Template updates do not overwrite notebooks, copied guides or local customization. Agents should follow current repository guidance while honoring personal exclusions. Schema version 0.1.0 and existing profile markers are unchanged by binding. A future schema migration needs its own reviewed transformation, backup, validation and rollback; never run it implicitly during a template pull or bind. Keep export policy unchanged unless separately authorized.
+For updates, inspect each repository's status first and preserve local edits. From a clean code checkout, `git pull --ff-only` updates the template. Separately, `git -C "/absolute/personal-data" pull --ff-only` updates personal history only if that repository has a configured upstream. A local-only repository needs no pull. Stop and reconcile divergent history or local changes; do not reset, force-push or overwrite notes to make an update work. Template updates do not overwrite private data, copied legacy guides or custom behavior. A configured source pin stays at its exact commit after a pull; only an explicitly selected tracking branch can select a new verified commit next session. For a fork, review/integrate upstream changes deliberately and update the host source selection within authorization. Keep generic/custom behavior in the selected fork, not the private data or a second host manual. Use [reviewed migration](MIGRATIONS.md#centralized-instructions-and-data-only-instances) for old private guides; no automatic deletion or permission expansion occurs. Schema version 0.1.0 and the strict two-field marker remain unchanged. A future schema migration needs its own backup, validation and rollback; never run it implicitly during a pull or bind. Keep export policy unchanged unless separately authorized.
