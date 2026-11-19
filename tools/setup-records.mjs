@@ -20,7 +20,11 @@ function load(dest,draftName){
   // Validate the record shape first, using temporary retired copies of known targets.
   if(!Array.isArray(e.supersedes))stop('INVALID_SUPERSESSION');
   for(const id of e.supersedes){
-   if(!known.has(id)||known.get(id).status!=='active'||replaced.has(id))stop('AMBIGUOUS_SUPERSESSION');
+   const prior = known.get(id);
+   if(!prior || prior.status !== 'active' || replaced.has(id))stop('AMBIGUOUS_SUPERSESSION');
+   if(prior.source.kind === 'user_statement' && prior.confirmation === 'confirmed' && e.source?.kind !== 'user_statement'){
+    stop('DIRECT_CORRECTION_REQUIRED');
+   }
    replaced.add(id);
   }
   const retired=register.entries.map(old=>e.supersedes.includes(old.id)?{...old,status:'superseded'}:old);

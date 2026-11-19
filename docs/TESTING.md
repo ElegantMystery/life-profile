@@ -140,6 +140,21 @@ These are model-behavior scenarios, not automated semantic tests. Use a disposab
 
 Record actual questions, affected paths, link checks, unchanged unrelated notes/register/export policy and any failures in local test evidence. Do not copy a real profile into fixtures. Do not add raw source transcripts to progress.
 
+### Learning tracker across updates
+
+Use a fictional instance and send each turn separately. Inspect `domains/learning-skills.md` and any affected navigation summary after **each** turn. Exercise a Markdown-only run first. For the optional filesystem-register path, also opt the fictional reading tracker into structured saving. In both runs keep an unrelated notebook and export policy for byte comparison.
+
+| Turn | Required observation |
+| --- | --- |
+| “I started reading Paper A. Paper B is next on my list.” | A is current. B is planned. Create a short linked current-context summary for the fixture so later updates exercise it. |
+| “I’m halfway through A.” | One current A entry reflects progress. B stays planned. No completion date is inferred. |
+| “I finished A.” | A can appear as completed history. Neither A nor B appears as currently being read. |
+| “I just started B.” | B alone is current in the notebook and linked summary. A remains a completed item. |
+| “Correction: I started Paper C instead. B is still on my list.” | C replaces B as current everywhere. B returns to planned without a false history of reading it. |
+| Supply an older AI summary saying A is current, with a file modification time later than the correction. | The established reading status and completion history survive. No date gains the meaning of a user verification. |
+
+In the opted-in run, inspect active statements after each turn. The corresponding older current-status records must be superseded, independent history preserved, and current statements consistent with Markdown. In the Markdown-only run the register stays byte-identical. Record any partial write before advancing.
+
 ### Compact context acceptance
 
 Run `node --test tests/compact-context.test.mjs` for a fictional three-notebook comparison. The test checks exact facts, source labels and paths, and reports CLI output bytes against the full selected notebook bytes. This measures text supplied to the agent. The helper still reads the selected files locally.
