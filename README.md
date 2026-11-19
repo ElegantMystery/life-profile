@@ -17,6 +17,8 @@ Use a **coding agent or personal AI agent** with either:
 - **Filesystem access:** persistent file read/write, terminal commands, **Node.js 20+** and **Git**. Private syncing also needs authenticated Git access. Follow the workspace steps below.
 - **An authenticated GitHub connector:** repository/file reads, version-guarded writes and read-back. It can use a private profile directly without a local clone or terminal Git. Use [connector-only setup](#connector-only-setup). Creation needs additional supported tools; access alone does not authorize uploads.
 
+For tested project-scoped Codex CLI and Claude Code examples, see [connect a project to Life Profile](docs/HOST-ADAPTERS.md).
+
 With a cloud-hosted agent, the files may live on its computer rather than your own device.
 
 **1. Get the template in your agent's workspace.**
