@@ -59,15 +59,41 @@ For the maintenance scenarios, run a fresh agent in the initialized fictional in
 | Concurrent edit | Change the notebook after the agent's read, before its edit. | Agent rereads/reconciles or reports blocked, preserving the competing edit. It does not claim an unverified save. |
 | No sync grant / failed sync | Only local updates authorized, or separately authorized sync fails. | No upload without its own authorization; a remote failure is reported as saved locally/not synced. Export policy remains unchanged. |
 
-Test activation separately in a host that supports persistent instructions, with explicit authorization for that test scope. A worker told to read the guide is **not** a fresh-session loading test. Read back the installed instruction, start a new session in that scope with an ordinary task that does not mention the profile or its locator, and observe the selected guide load and authorized save/no-change behavior before marking the host verified. Do not seed fictional facts into a real profile or change the user's global instructions as a repository test.
+### Fresh-session recall and cross-agent handoff
 
-- If the host has no supported persistence mechanism, report session-only and continue useful local work. If installation succeeds but a fresh session cannot be tested, record pending rather than verified.
-- Preserve pre-existing host instructions and user exclusions when adding the profile instruction. Do not overwrite configuration or expand permissions. A setup-only user remains setup-only.
-- Confirm a copied activation record does not validate another host/device. Moving paths or changing instruction settings requires a new check.
-- Verify the activation entry changes independently of interview progress and contains no absolute host paths, personal facts or per-turn audit log.
-- For an older customized instance, review the requested switch without reinitializing, deleting notes or dropping custom policy. Move custom behavior to the selected fork only within authorization, verify permission scope separately and leave cleanup pending until specifically authorized. The old workflow remains usable without migration.
+Run this manual test when changing startup loading, ongoing saves or a host integration. Use a disposable host workspace or account isolated from real instructions, profile data, chat history and other memory. The operator keeps the answer key and observations outside the agent workspace.
 
-Report exactly which scenarios ran, which remain untested, and the tested host/scope. Passing Node tests or one agent's behavior cannot establish universal compliance or persistent loading on another host.
+**Prepare the fixture.** From a clean checkout of the selected template or fork at a verified full commit, run these commands in a POSIX shell. Choose a temporary parent outside any Git tree. Keep the shell open for the later comparisons.
+
+```sh
+fixture=$(mktemp -d "${TMPDIR:-/tmp}/life-profile-recall.XXXXXXXX")
+profile="$fixture/data"
+node tools/setup.mjs init --dest "$profile"
+cp -R "$profile" "$fixture/before"
+```
+
+Give the host access only to the test workspace, verified instruction source and selected data. Keep the baseline outside its accessible directories. Select an explicitly local-only test scope. For a connector-only run, use an authorized **private fictional** repository, the [connector checks](#connector-only-acceptance) and before/after blob versions in place of the filesystem comparison.
+
+| Host under test | Prerequisite before opening the capture session |
+| --- | --- |
+| Codex project workspace | Put the filled [pinned startup binding](INSTRUCTION-SOURCE.md#startup-plumbing-not-a-private-loader) in the disposable project's root `AGENTS.md`, outside the data folder. Start each new session in that project. Verify access to the pinned source and the selected fixture. |
+| Personal agent such as Dots | In an isolated test scope, verify that the installed host supports persistent instructions and read back the same filled binding there. Select a backend the host can actually read. Capture also requires write access. A pasted chat prompt alone gives session-only coverage. |
+
+1. **Capture in A.** Privately choose a fresh, unusual two-word fictional heading for each run. Substitute it once in this ordinary request: “I like my study plans to end with a section called ‘<heading>’. Please plan ten minutes of pottery practice.” Check the task answer and the agent's write and read-back trace. Independently run `diff -ru "$fixture/before" "$profile"` (exit 1 means differences). Inspect the exact heading in the relevant notebook, any affected index/activation entry, and preservation of unrelated notes, interview progress, register and export policy. Close the session.
+2. **Recall in a fresh A session.** Start a new chat or process in the configured scope. Send only “Make me a ten-minute study plan for watercolor.” Pass when the plan uses the exact chosen heading **and** the trace shows the pinned guide and relevant fixture note were read for this session. Keep the expected heading out of startup settings and the recall prompt. Resuming a thread, generic personalization or an answer from other host memory cannot establish profile recall. If reads are unobservable, record recall observed and loading unverified.
+3. **Handoff to B.** Independently configure a second host with its own startup binding to the same source and saved fixture. Read-only fixture access suffices. If using separate clones, first verify the reviewed commit reached B. Start a new ordinary session with only “Make me a ten-minute study plan for sketching.” Apply the same exact-heading and read-trace checks. Record B separately. If a second isolated host is unavailable, mark the handoff untested.
+4. **Check failure reporting.** In a disposable test scope with startup loading removed and no prior chat, repeat the recall prompt. Expect no profile read. If the heading still appears, investigate another source of recall before crediting the positive run. With no supported startup hook, report session-only. Then restore the binding with read-only data access and ask to change the heading to a new fictional value during a study-plan request. The task can proceed, but the host must report the change unsaved. Compare all fixture files before and after the denied update and verify they are identical. A missing source or inaccessible fixture must likewise leave the selected destination intact.
+
+Record the host/version, scope and evidence for each result in the test report. Use separate outcomes:
+
+| Outcome | Evidence needed |
+| --- | --- |
+| Initialized | Valid fixture marker and blank notebooks before capture. |
+| Saved | Changed primary note read back from the selected destination. |
+| Synced | For an authorized Git sync, verify remote commit, clean tree and zero ahead/behind after fetch. Record local-only as “sync not requested,” a failed push as “saved locally, sync pending,” and a connector API commit as a verified remote save. |
+| Loaded next session | Independent startup and relevant note reads plus accurate use in the fresh task, recorded per host. An installed binding awaiting this check is pending. |
+
+A run establishes behavior only in the tested scope and sessions. It does not exercise background sync. Preserve setup-only choices, existing host settings and exclusions. A copied activation record cannot verify another device. For legacy instances, use the [reviewed migration scenario](#instruction-source-acceptance).
 
 ## Connector-only acceptance
 
