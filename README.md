@@ -83,6 +83,14 @@ Keep sensitive information and secrets out of your profile. Files are plaintext,
 
 Setup includes selecting shared guidance and checking host activation. New private instances contain **no instructions, loader, `AGENTS.md` or source configuration**. Opening only the private folder cannot make an agent load the template. Use the host's supported persistent settings to retain both the selected template/fork version and the data destination, along with permission scope. The [host-binding examples](docs/INSTRUCTION-SOURCE.md#startup-plumbing-not-a-private-loader) cover filesystem and direct GitHub.
 
+For routine Git sync from a local clone, add this to the host binding after filling in your private destination:
+
+```text
+At session start and after profile updates, sync reviewed non-sensitive changes
+to my verified private repository <owner/name>, branch <branch>. Use a separate
+clone per active agent. Reconcile compatible edits and ask about ambiguous facts.
+```
+
 The guided setup default is a verified immutable commit, so updates do not silently change your instructions. You may explicitly choose to track a named branch; the agent resolves it once per session and uses that commit throughout. Tracking cannot expand permissions or switch data destinations. See [source selection and offline behavior](docs/INSTRUCTION-SOURCE.md).
 
 To customize behavior, fork the template and select your fork as the instruction source. Keep private facts, credentials and private data locators out of a public fork. Your fork will not automatically receive upstream fixes; review and integrate them deliberately. There is no separate personal override manual in the private repository or host settings.
