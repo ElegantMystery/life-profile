@@ -97,7 +97,7 @@ To customize behavior, fork the template and select your fork as the instruction
 
 A normal chat message may not persist. Setup should report data readiness, source readiness and whether ongoing use is verified, pending a fresh-session check, session-only or declined. A stronger activation check uses a fresh ordinary-task session that does not mention the profile or either locator, then verifies guide loading and authorized save/no-change behavior. Do not invent personal facts for the test. A worker explicitly supplied the guide only tests its behavior, not persistent loading. No template guarantees that every host loads or follows it.
 
-Existing private profiles are unchanged and remain usable. Public template updates do not remove or replace their copied guides. Ask for a [reviewed migration](docs/MIGRATIONS.md#centralized-instructions-and-data-only-instances) to preserve custom behavior in your selected fork and verify permission scope before switching. Do not reinitialize or delete old files as routine cleanup.
+Existing private profiles are unchanged and remain usable. Public template updates do not remove or replace their copied guides. Ask for a [reviewed migration](docs/MIGRATIONS.md#centralized-instructions-and-data-only-instances) to preserve custom behavior in your selected fork and verify permission scope before switching. For a filesystem instance, `node tools/setup.mjs migration-check` reports legacy guides without changing anything. Direct GitHub users can follow the same guide’s guarded remote checklist. Do not reinitialize or delete old files as routine cleanup.
 
 ## What you can keep
 

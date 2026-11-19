@@ -108,6 +108,8 @@ Use fresh consuming agents and fictional source/data repositories, with inspecta
 | New data-only setup | Actual generated tree contains only 18 persisted data/state files. No private guide/config/loader; index links resolve; blank notebooks contain no prompts/instructions. Empty optional directories need not survive Git/connector creation. |
 | Legacy migration | Existing guides, custom behavior, notes/progress/records/export policy survive normal operations. An unrequested source update does not switch workflows or delete files. Requested migration reports unresolved fork/publication, authorization, cleanup or startup checks honestly. |
 
+The legacy migration suite exercises reviewed filesystem retirement, stale digests, unavailable/incompatible sources, unsafe paths, backup collisions and byte-for-byte rollback. A disposable Git object/ref transaction exercises the direct-GitHub single-commit procedure and stale-head rejection; it does not test live connector permissions or host activation.
+
 Test supported host persistence separately. A test agent given these selections has not proven that an actual host retained them or will load either repository next session. No simulated connector proves live GitHub API guards or access.
 
 ## Private repository and second-device acceptance
