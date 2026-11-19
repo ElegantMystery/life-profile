@@ -20,6 +20,32 @@ The [setup workflow](AI-SETUP.md) uses `tools/setup.mjs`: empty-instance initial
 
 Exports require a named purpose and a finite review date. Only confirmed user statements, active and unexpired, with public/general sensitivity and no third-party subject are eligible. Unknown, private, sensitive, inferred, disputed, superseded and overdue records are excluded, even when allowlisted. V0.1 has no override. Provenance and private notes are not emitted. Invalid input fails before output. Unknown versions/fields fail closed.
 
+## Compact context for ordinary tasks
+
+After startup verification, a filesystem agent can request a short JSON view of the notebooks relevant to the current task. For example, a learning question might use:
+
+```sh
+node tools/setup.mjs summary --dest "/absolute/path/to/selected/profile" --domains learning-skills,preferences
+```
+
+Omit `--dest` only when the tools checkout is bound to the selected instance. Choose one or more of `preferences`, `learning-skills` and `goals-projects`. Each result gives a path relative to the instance and an excerpt from the primary Markdown. The helper computes the view on each call and writes no file. Its output is private profile data.
+
+For frequently useful, non-sensitive facts, the first section immediately after the notebook title may look like this fictional example:
+
+```markdown
+# Learning and skills
+
+## Quick context
+
+- Currently practicing wheel throwing.
+
+Source: user answer
+
+## Notes
+```
+
+Keep the original fact in this section and edit it here when corrected. Select one to three single-line bullets with shared provenance and a final single-line `Source: …` label. Keep uncertainty, scope and dates with the facts they qualify. The excerpt limit is 600 UTF-16 code units per notebook. If the section is absent, ambiguous, too large or uses another layout, `excerpt: null` directs the caller to the notebook when detail is needed. Existing free-form notes can keep their layout. A connector-only agent continues to read relevant notebooks at its verified commit.
+
 ## Durability and safety
 
 UTF-8 Markdown and JSON; explicit schema version 0.1.0, stable opaque IDs, ISO calendar dates interpreted in UTC. Original project content is MIT licensed. No secret storage, encryption claims or permissions implied by profile text. A label and .gitignore are not access control. The tools never create Git history for a private instance automatically.

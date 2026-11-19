@@ -1,13 +1,14 @@
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { initProfile, bindProfile, unbindProfile, storageStatus, selectedDirectory, boundDirectory, stop } from './setup-storage.mjs';
+import { compactContext } from './compact-context.mjs';
 import { inspectDraft, saveDraft } from './setup-records.mjs';
 
 import { legacyGuideNames, migrationCheck, retireGuide } from './legacy-migration.mjs';
 
 export function run(args){
  const [command,...rest]=args;
- const expected={'migration-check':['--dest'],'retire-guide':['--dest','--guide','--sha256','--backup','--source-checkout','--source-commit'],bind:['--dest'],unbind:[],status:[],init:['--dest'],'check-draft':['--dest','--draft'],save:['--dest','--draft','--ids']}[command];
+ const expected={'migration-check':['--dest'],'retire-guide':['--dest','--guide','--sha256','--backup','--source-checkout','--source-commit'],bind:['--dest'],unbind:[],status:[],summary:['--dest','--domains'],init:['--dest'],'check-draft':['--dest','--draft'],save:['--dest','--draft','--ids']}[command];
  if(!expected||rest.length%2!==0||rest.length>expected.length*2)stop('INVALID_ARGUMENTS');
  const options={};
  for(let i=0;i<rest.length;i+=2){
@@ -24,6 +25,11 @@ export function run(args){
  if(command==='status'){
   const result=storageStatus(),files=legacyGuideNames(result.destination);
   return files.length ? {...result,legacyGuides:files,migration:'review-required'} : result;
+ }
+ if(command==='summary'){
+  const dest=options['--dest']??boundDirectory();
+  if(!dest)stop('DESTINATION_REQUIRED');
+  return compactContext(dest,options['--domains']);
  }
  if(command!=='init'){
   options['--dest']??=boundDirectory();

@@ -181,6 +181,12 @@ Use a fictional instance and send each turn separately. Inspect `domains/learnin
 
 In the opted-in run, inspect active statements after each turn. The corresponding older current-status records must be superseded, independent history preserved, and current statements consistent with Markdown. In the Markdown-only run the register stays byte-identical. Record any partial write before advancing.
 
+### Compact context acceptance
+
+Run `node --test tests/compact-context.test.mjs` for a fictional three-notebook comparison. The test checks exact facts, source labels and paths, and reports CLI output bytes against the full selected notebook bytes. This measures text supplied to the agent. The helper still reads the selected files locally.
+
+For a consuming-agent check, place a fictional preference for diagrams in the [compact section](ARCHITECTURE.md#compact-context-for-ordinary-tasks). Ask for a study plan and observe whether the agent applies the preference after reading the excerpt. Then say “Actually, I prefer worked examples. Show me how to estimate the volume of a mug.” Check the answer uses a worked example, inspect the primary note, and regenerate the summary. Only the corrected preference should be current. Remove the optional section and repeat a relevant query: the summary should return the notebook path and the agent should consult the primary note for missing detail. Record host behavior separately from the CLI comparison.
+
 ### Deterministic versus agent verification
 
 Run `node --test` and `node tools/check-repository.mjs` for storage/schema regressions and public document links. These do not establish factual accuracy, detect stale semantic summaries, or test interview behavior. For a disposable fixture, check local link targets and progress paths directly; evaluate wording and source scope against the table above. No new metadata schema or background crawler is required.
