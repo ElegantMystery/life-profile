@@ -179,3 +179,45 @@ test('direct user restatement can supersede identical inferred wording without a
  assert.equal(entries[1].source.kind,'user_statement');assert.equal(entries[1].confirmation,'confirmed');
  assert.equal(entries[1].statement,inferred.statement);
 });
+
+test('weaker sources cannot retire a confirmed user statement', t => {
+ const dest = instance(t);
+ draft(dest);
+ save(dest);
+ const register = join(dest, 'records.json');
+ const before = readFileSync(register, 'utf8');
+
+ for (const kind of ['ai_inference', 'third_party_report', 'unknown']) {
+  const replacement = {
+   ...candidate('imported-pref'),
+   statement: 'May prefer open-ended craft lessons.',
+   source: {kind, reference: 'Fictional summary'},
+   supersedes: ['fictional-pref']
+  };
+  const name = draft(dest, [replacement], 'import.json');
+  assert.throws(() => saveDraft({dest, draftName: name}), {message: 'DIRECT_CORRECTION_REQUIRED'});
+  assert.equal(readFileSync(register, 'utf8'), before);
+ }
+});
+
+test('reading progress can advance while completed and planned items remain distinct', t => {
+ const dest = instance(t);
+ const transitions = [
+  ['started-a', 'Currently reading Paper A.', [], ['started-a']],
+  ['plan-b', 'Paper B is on the reading list.', [], ['started-a', 'plan-b']],
+  ['progress-a', 'Halfway through Paper A.', ['started-a'], ['plan-b', 'progress-a']],
+  ['finished-a', 'Finished Paper A.', ['progress-a'], ['plan-b', 'finished-a']],
+  ['started-b', 'Currently reading Paper B.', ['plan-b'], ['finished-a', 'started-b']]
+ ];
+
+ for (const [id, statement, supersedes, expectedActive] of transitions) {
+  const entry = {...candidate(id), domain: 'learning-skills', statement, supersedes};
+  const name = draft(dest, [entry], 'reading.json');
+  saveDraft({dest, draftName: name});
+  const {entries} = json(join(dest, 'records.json'));
+  assert.deepEqual(entries.filter(record => record.status === 'active').map(record => record.id), expectedActive);
+  for (const target of supersedes) {
+   assert.equal(entries.find(record => record.id === target).status, 'superseded');
+  }
+ }
+});
