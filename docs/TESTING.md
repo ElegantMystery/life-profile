@@ -121,6 +121,8 @@ Use fictional temporary tool checkouts and data instances only. For local Git ve
 - With commits on both devices, verify that divergent `pull --ff-only` stops without deleting either side. A failed network/authentication operation must be reported as pending sync, never as a successful backup.
 - Resume the fictional interview using saved Markdown/progress with an empty register, without repeating known questions. This agent behavior still requires the dialogue scenario above; passing Git commands alone is insufficient.
 
+Run `node --test tests/routine-sync.test.mjs` for two standalone fictional clones, divergent edits, semantic review checkpoints, push races, helper contention, protected history and recovery. In a consuming-agent check, put mutually exclusive preferences on different lines, give the agent both commit IDs, and verify it asks about the conflict before applying a clean Git merge.
+
 For an explicitly authorized GitHub integration check, additionally verify the signed-in account, private destination and fetch/push URLs before uploading fictional content. Do not claim a local bare-remote test validated GitHub permissions.
 
 ## Profile quality acceptance

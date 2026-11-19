@@ -91,6 +91,8 @@ A normal chat message may not persist. Setup should report data readiness, sourc
 
 Existing private profiles are unchanged and remain usable. Public template updates do not remove or replace their copied guides. Ask for a [reviewed migration](docs/MIGRATIONS.md#centralized-instructions-and-data-only-instances) to preserve custom behavior in your selected fork and verify permission scope before switching. Do not reinitialize or delete old files as routine cleanup.
 
+For an existing filesystem profile, you can ask “Sync my reviewed updates with the verified private repository and branch using the routine-sync helper. Use a separate clone for each writer. Tell me if sync is pending.” See [everyday Git sync](docs/ROUTINE-SYNC.md).
+
 ## What you can keep
 
 Each module is a Markdown notebook. Use whichever are helpful; all are optional.

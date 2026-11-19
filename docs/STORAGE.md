@@ -170,31 +170,7 @@ This section is for filesystem profiles with a local Git repository. Direct GitH
 
 Ask the agent: “Sync my Life Profile with its verified private repository.” That request authorizes the necessary reviewed Git commits, pulls and pushes to that destination. It does not authorize public sharing, changing export policy or uploading excluded content. There is no background synchronization; a local notebook save is not a remote backup.
 
-Before a session, sync so the agent reads current notes. After a session, sync again before switching devices. Use one device at a time when practical. In the **personal-data repository**:
-
-1. Inspect `git status --short --branch`, `git remote -v` and the current branch/upstream. Verify destination/visibility during initial setup and whenever the destination or access changes. Stop if a merge/rebase is already in progress or the branch is detached. If no upstream exists, finish the first-push workflow rather than guessing one.
-2. If local edits exist, review them and commit only intended non-sensitive profile paths. Preserve unrelated changes; do not blindly stage everything or auto-stash them. For example, after reviewing a changed preference and progress note:
-
-   ```sh
-   git -C "/absolute/personal-data" add -- domains/preferences.md SETUP-PROGRESS.md
-   git -C "/absolute/personal-data" diff --cached --stat
-   git -C "/absolute/personal-data" diff --cached --check
-   git -C "/absolute/personal-data" commit -m "Update profile notes"
-   ```
-
-   Adapt the paths to the actual changes, including reviewed deletions. Skip the commit when nothing changed. If unrelated uncommitted files remain, resolve their handling before pulling.
-3. With a clean working tree, pull and push:
-
-   ```sh
-   git -C "/absolute/personal-data" pull --ff-only
-   git -C "/absolute/personal-data" push
-   git -C "/absolute/personal-data" fetch origin
-   git -C "/absolute/personal-data" status --short --branch
-   git -C "/absolute/personal-data" rev-list --left-right --count "HEAD...@{upstream}"
-   ```
-
-   These examples use `origin` from initial setup; use the verified upstream remote if the existing repository uses another name. Stop at the first failed command. If both devices made commits, `pull --ff-only` may refuse divergent history. Preserve both sides, compare the affected notes and reconcile deliberately; clarify genuinely conflicting facts. Never reset, force-push or discard notes to make sync pass. Retry verification after reconciliation. Authentication/network failures leave local saves intact; report sync as pending.
-4. Report success only after successful remote operations, a clean working tree and `0 0` ahead/behind. If offline, say “saved locally; not synced” and retry later.
+For a bound standalone data clone on GitHub.com, use [reviewed Git sync](ROUTINE-SYNC.md) at session start and after reviewed local saves. It explains exact file selection, immutable tip review, one bounded retry and recovery. Allocate a separate clone to each active writer.
 
 ## Resume on another device
 
