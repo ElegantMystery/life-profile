@@ -6,13 +6,15 @@ import {pathToFileURL} from 'node:url';
 import {boundDirectory, privateInstance, readPrivateFile} from './setup-storage.mjs';
 import {validate} from './profile.mjs';
 
+const githubHost = 'github.com';
+
 class Pending extends Error {}
 function stop(code) { throw new Pending(code); }
 function quietly(code, operation) {
  try { return operation(); } catch { stop(code); }
 }
 function invoke(program, args) {
- const env = {...process.env, GH_HOST:'github.com', GH_PROMPT_DISABLED:'1'};
+ const env = {...process.env, GH_HOST:githubHost, GH_PROMPT_DISABLED:'1'};
  for (const key of Object.keys(env)) if (key.startsWith('GIT_')) delete env[key];
  env.GIT_TERMINAL_PROMPT = '0';
  return execFileSync(program, args, {encoding:'utf8', env, stdio:['ignore','pipe','pipe']});
@@ -27,7 +29,7 @@ function network(root, ...args) {
 }
 const github = {
  metadata(repo) {
-  const api = path => JSON.parse(invoke('gh',['api','--hostname','github.com',path]));
+  const api = path => JSON.parse(invoke('gh',['api','--hostname',githubHost,path]));
   const {login} = api('user'), {full_name,visibility} = api('repos/' + repo);
   return {login,full_name,visibility};
  },
@@ -45,6 +47,9 @@ function localCommit(root, paths) {
  if (!paths.length || paths.some(path => !reviewedPath(path))) stop('REVIEWED_PATH_REQUIRED');
  if (git(root,'diff','--cached','--name-only','-z')) stop('INDEX_PENDING');
  for (const path of paths) {
+  // A deleted directory with a notebook-like name can still select a whole subtree.
+  const previous = git(root,'ls-tree','HEAD','--',path);
+  if (previous && !previous.startsWith('100644 blob ')) stop('UNSAFE_PATH');
   const file = join(root,path);
   // readPrivateFile also checks every ancestor, symlinks and the hard-link count.
   const stat = lstatSync(file,{throwIfNoEntry:false});
@@ -67,8 +72,9 @@ function destination(root, branch, repo) {
      git(root,'config','--get-all','branch.'+branch+'.merge').trim() !== 'refs/heads/'+branch) stop('UPSTREAM_MISMATCH');
  const upstream = 'refs/remotes/'+remote+'/'+branch;
  if (git(root,'rev-parse','--symbolic-full-name','@{upstream}').trim() !== upstream) stop('UPSTREAM_MISMATCH');
- const url = 'https://github.com/'+repo+'.git';
- const allowed = [url,url.slice(0,-4),'git@github.com:'+repo+'.git','git@github.com:'+repo];
+ const url = 'https://'+githubHost+'/'+repo+'.git';
+ const ssh = 'git@'+githubHost+':'+repo;
+ const allowed = [url,url.slice(0,-4),ssh+'.git',ssh];
  for (const args of [['--all'],['--push','--all']]) {
   if (!allowed.includes(git(root,'remote','get-url',...args,remote).trim())) stop('DESTINATION_MISMATCH');
  }
@@ -107,11 +113,22 @@ function checkTree(root, tree) {
  }
  validateRegister(git(root,'show',tree+':records.json'));
 }
+function candidateTree(root, local, remote) {
+ try {
+  return git(root,'merge-tree','--write-tree',local,remote).trim();
+ } catch (error) {
+  if (error.status === 1) return null; // A textual conflict has no clean candidate.
+  throw error;
+ }
+}
 function synchronize(root, service, {account,repo,branch,command,tips,url,upstream}) {
  ensureClean(root);
- function fetchVerified() {
+ function verifyIdentity() {
   const metadata = quietly('AUTH_PENDING', () => service.metadata(repo));
   if (metadata.login !== account || metadata.full_name !== repo || metadata.visibility !== 'private') stop('DESTINATION_MISMATCH');
+ }
+ function fetchVerified() {
+  verifyIdentity();
   quietly('FETCH_PENDING', () => service.fetch(root,url,'refs/heads/'+branch+':'+upstream));
   return revision(root,upstream);
  }
@@ -125,21 +142,27 @@ function synchronize(root, service, {account,repo,branch,command,tips,url,upstre
  checkedHistory(root,base,local);
  checkedHistory(root,base,remote);
  checkTree(root,remote);
- if (command === 'inspect') return {state,base,local,remote};
- if (state === 'behind') {
-  git(root,'merge','--ff-only','--no-overwrite-ignore',remote);
-  if (revision(root,'HEAD') !== remote) stop('MERGE_REVIEW_PENDING');
- }
  if (state === 'diverged') {
-  // Compute without touching the index/worktree. Textual compatibility still needs semantic review.
-  const tree = quietly('CONTENT_CONFLICT', () => git(root,'merge-tree','--write-tree',local,remote).trim());
-  checkTree(root,tree);
-  git(root,'merge','--no-ff','--no-edit','--no-overwrite-ignore','-m','Reconcile reviewed profile updates',remote);
-  if (revision(root,'HEAD^{tree}') !== tree) stop('MERGE_REVIEW_PENDING');
+  const candidate = candidateTree(root,local,remote);
+  if (candidate) checkTree(root,candidate);
+  if (command === 'inspect') return {state,base,local,remote,candidate};
+  if (!candidate) stop('CONTENT_CONFLICT');
+  if (tips[2] !== candidate) stop('REVIEW_STALE');
+  git(root,'merge','--no-autostash','--no-ff','--no-edit','--no-overwrite-ignore','-m','Reconcile reviewed profile updates',remote);
+  if (revision(root,'HEAD^{tree}') !== candidate) stop('MERGE_REVIEW_PENDING');
+ } else if (command === 'inspect') {
+  return {state,base,local,remote};
+ }
+ if (state === 'behind') {
+  git(root,'merge','--no-autostash','--ff-only','--no-overwrite-ignore',remote);
+  if (revision(root,'HEAD') !== remote) stop('MERGE_REVIEW_PENDING');
  }
  ensureClean(root);
  const finalHead = revision(root,'HEAD');
- if (finalHead !== remote) quietly('PUSH_PENDING', () => service.push(root,url,finalHead+':refs/heads/'+branch));
+ if (finalHead !== remote) {
+  verifyIdentity();
+  quietly('PUSH_PENDING', () => service.push(root,url,finalHead+':refs/heads/'+branch));
+ }
  if (fetchVerified() !== finalHead || revision(root,'HEAD') !== finalHead) stop('VERIFY_PENDING');
  ensureClean(root);
  return {state:'synced',local:finalHead,remote:finalHead};
@@ -149,7 +172,7 @@ export function run(args, service=github) {
  const [command,account,repo,branch,...rest] = args;
  if (!['commit','inspect','apply'].includes(command) || !/^[A-Za-z0-9-]+$/.test(account ?? '') ||
      !/^[A-Za-z0-9-]+\/[A-Za-z0-9_.-]+$/.test(repo ?? '') || !branch ||
-     (command === 'inspect' && rest.length) || (command === 'apply' && (rest.length !== 2 || rest.some(s => !/^[a-f0-9]{40}$/.test(s))))) stop('INVALID_ARGUMENTS');
+     (command === 'inspect' && rest.length) || (command === 'apply' && ((rest.length < 2 || rest.length > 3) || rest.some(s => !/^[a-f0-9]{40}$/.test(s))))) stop('INVALID_ARGUMENTS');
  try {
   const root = boundDirectory();
   if (!root || !lstatSync(join(root,'.git')).isDirectory()) stop('BOUND_CLONE_REQUIRED');

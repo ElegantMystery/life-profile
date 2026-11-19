@@ -46,7 +46,7 @@ async function fixture(t) {
    edit:(path, text) => writeFileSync(join(dir, path), text),
    read:path => readFileSync(join(dir, path), 'utf8'),
    commit:(path, text) => {writeFileSync(join(dir,path), text); return call('commit', path);},
-   review:() => call('inspect'), apply:review => call('apply', review.local, review.remote)};
+   review:() => call('inspect'), apply:review => call('apply', review.local, review.remote, ...(review.candidate ? [review.candidate] : []))};
  }
  return {a:await agent('one'), b:await agent('two'), remote};
 }
@@ -61,6 +61,7 @@ test('independent reviewed additions integrate only after both current tips are 
  const review = a.review();
  assert.equal(review.state, 'diverged');
  assert.throws(() => a.call('apply', review.local, review.local), /REVIEW_STALE/);
+ assert.throws(() => a.call('apply', review.local, review.remote, review.local), /REVIEW_STALE/);
  assert.equal(a.apply(review).state, 'synced');
  assert.equal(git(remote, 'rev-parse', 'main'), a.head());
  assert.equal(a.read(goals), b.read(goals));
@@ -125,6 +126,10 @@ test('offline, denied access and interrupted integration preserve staged and uns
  a.service.fetch = () => {throw Error('SECRET-FICTIONAL');};
  assert.throws(a.review, /^Error: FETCH_PENDING$/);
  a.service.fetch = fetch;
+ const metadata = a.service.metadata;
+ a.service.metadata = () => {throw Error('SECRET-FICTIONAL');};
+ assert.throws(a.review, /^Error: AUTH_PENDING$/);
+ a.service.metadata = metadata;
  const review = a.review();
  a.service.push = () => {throw Error('SECRET-FICTIONAL');};
  assert.throws(() => a.apply(review), /^Error: PUSH_PENDING$/);
@@ -183,4 +188,18 @@ test('a transient protected change in outgoing history cannot be uploaded', asyn
  a.edit('export-policy.json',policy); git(a.dir,'commit','-qam','Restore policy');
  assert.throws(a.review, /PROTECTED_HISTORY/);
  assert.equal(git(remote,'rev-parse','main'), original);
+});
+
+test('a reviewed notebook name cannot stage the deletion of an unreviewed subtree', async t => {
+ const {a} = await fixture(t);
+ const nested = 'notes/legacy.md';
+ mkdirSync(join(a.dir,nested),{recursive:true});
+ a.edit(nested+'/unrelated.md','Fictional unrelated content.\n');
+ git(a.dir,'add','--',nested);
+ git(a.dir,'commit','-qm','Simulate an older notebook layout');
+ const head = a.head();
+ rmSync(join(a.dir,nested),{recursive:true});
+ assert.throws(() => a.call('commit',nested), /UNSAFE_PATH/);
+ assert.equal(git(a.dir,'diff','--cached','--name-only'), '');
+ assert.equal(a.head(),head);
 });
