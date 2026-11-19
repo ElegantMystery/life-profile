@@ -170,31 +170,13 @@ This section is for filesystem profiles with a local Git repository. Direct GitH
 
 Ask the agent: “Sync my Life Profile with its verified private repository.” That request authorizes the necessary reviewed Git commits, pulls and pushes to that destination. It does not authorize public sharing, changing export policy or uploading excluded content. There is no background synchronization; a local notebook save is not a remote backup.
 
-Before a session, sync so the agent reads current notes. After a session, sync again before switching devices. Use one device at a time when practical. In the **personal-data repository**:
+With a standing grant, sync at session start before using the notes, and after each batch of profile updates. Use a separate standalone clone for each concurrently active agent. Apply these steps only to the verified personal-data repository:
 
-1. Inspect `git status --short --branch`, `git remote -v` and the current branch/upstream. Verify destination/visibility during initial setup and whenever the destination or access changes. Stop if a merge/rebase is already in progress or the branch is detached. If no upstream exists, finish the first-push workflow rather than guessing one.
-2. If local edits exist, review them and commit only intended non-sensitive profile paths. Preserve unrelated changes; do not blindly stage everything or auto-stash them. For example, after reviewing a changed preference and progress note:
-
-   ```sh
-   git -C "/absolute/personal-data" add -- domains/preferences.md SETUP-PROGRESS.md
-   git -C "/absolute/personal-data" diff --cached --stat
-   git -C "/absolute/personal-data" diff --cached --check
-   git -C "/absolute/personal-data" commit -m "Update profile notes"
-   ```
-
-   Adapt the paths to the actual changes, including reviewed deletions. Skip the commit when nothing changed. If unrelated uncommitted files remain, resolve their handling before pulling.
-3. With a clean working tree, pull and push:
-
-   ```sh
-   git -C "/absolute/personal-data" pull --ff-only
-   git -C "/absolute/personal-data" push
-   git -C "/absolute/personal-data" fetch origin
-   git -C "/absolute/personal-data" status --short --branch
-   git -C "/absolute/personal-data" rev-list --left-right --count "HEAD...@{upstream}"
-   ```
-
-   These examples use `origin` from initial setup; use the verified upstream remote if the existing repository uses another name. Stop at the first failed command. If both devices made commits, `pull --ff-only` may refuse divergent history. Preserve both sides, compare the affected notes and reconcile deliberately; clarify genuinely conflicting facts. Never reset, force-push or discard notes to make sync pass. Retry verification after reconciliation. Authentication/network failures leave local saves intact; report sync as pending.
-4. Report success only after successful remote operations, a clean working tree and `0 0` ahead/behind. If offline, say “saved locally; not synced” and retry later.
+1. Verify the account, PRIVATE repository, fetch and push URLs, local branch and its named upstream. Check for interrupted operations or changes already staged by another writer. Preserve unrelated work and report pending if the clone cannot be used exclusively.
+2. Review intended paths and their contents, including deletions and commits already ahead of upstream. Stage only reviewed, non-sensitive profile files, inspect the entire staged diff, run validation for changed data, and commit with the configured author. Preserve the marker, export policy, exclusions and legacy custom behavior. Defer integration if unrelated dirty files remain.
+3. Fetch the verified remote. From a clean tree, fast-forward if possible. If the tips diverge, use `git merge --no-ff --no-commit "@{upstream}"`. Review both sides against the common ancestor, including changes Git combined cleanly. Keep compatible additions and provenance. A direct correction can settle an older assertion. For ambiguous facts, instructions or delete-versus-edit conflicts, abort only the merge you started, retain both commits and ask one focused question.
+4. Read back affected notes and summaries, validate changed JSON and links, and check for unresolved entries and conflict markers before committing a reviewed merge. Push explicitly to the verified remote and upstream branch using `git push <remote> HEAD:refs/heads/<branch>`. Never force-push or bypass branch rules.
+5. If another writer wins the push race, fetch and repeat reconciliation and validation, with at most three push attempts for this sync. For authentication, network or interrupted-operation failures, preserve local commits and report pending. After a successful push, fetch again and verify a clean tree and `git rev-list --left-right --count "HEAD...@{upstream}"` of `0 0` before reporting sync.
 
 ## Resume on another device
 
